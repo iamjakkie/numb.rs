@@ -19,4 +19,12 @@ mod tests {
         assert_eq!(v3, vector![5.0, 7.0, 9.0]);
     }
 
+    #[test]
+    fn test_vector_sub() {
+        let v1 = vector![1.0, 2.0, 3.0];
+        let v2 = vector![4.0, 5.0, 6.0];
+        let v3 = v1 - v2;
+        assert_eq!(v3, vector![-3.0, -3.0, -3.0]);
+    }
+
 }

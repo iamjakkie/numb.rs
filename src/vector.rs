@@ -26,3 +26,19 @@ impl<T: Float> Add for Vector<T> {
         Self::new(elements)
     }
 }
+
+
+impl<T: Float> Sub for Vector<T> {
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self {
+        assert_eq!(self.len(), other.len(), "Vectors must have the same length");
+        let elements = self
+            .elements
+            .iter()
+            .zip(other.elements.iter())
+            .map(|(a, b)| *a - *b)
+            .collect();
+        Self::new(elements)
+    }
+}
