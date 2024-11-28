@@ -1,12 +1,15 @@
 use std::ops::{Add, Sub, Mul, Div};
-use num::Float;
+use num::{Num, Float};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Vector<T> {
     elements: Vec<T>,
 }
 
-impl<T: Float> Vector<T> {
+impl<T> Vector<T> 
+where
+    T: Num + Copy,
+{
     pub fn new(elements: Vec<T>) -> Self {
         Self { elements }
     }
@@ -43,11 +46,16 @@ impl<T: Float> Sub for Vector<T> {
     }
 }
 
-impl<T: Float> Mul<T> for Vector<T> {
+impl<T, U> Mul<U> for Vector<T>
+where
+    T: Num + Copy + From<U>, 
+    U: Num + Copy,           
+{
     type Output = Self;
 
-    fn mul(self, scalar: T) -> Self {
-        let elements = self.elements.iter().map(|&x| x * scalar).collect();
+    fn mul(self, scalar: U) -> Self {
+        let scalar_t = T::from(scalar); // Convert scalar to vector's type
+        let elements = self.elements.iter().map(|&x| x * scalar_t).collect();
         Self::new(elements)
     }
 }
