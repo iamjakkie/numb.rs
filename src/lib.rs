@@ -1,14 +1,13 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+mod vector;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub use vector::Vector;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+#[macro_export]
+macro_rules! vector {
+    [] => {
+        Vector::<f64>::new(Vec::new())
+    };
+    ($($elem:expr),* $(,)?) => {
+        Vector::new(vec![$($elem),*])
+    };
 }
