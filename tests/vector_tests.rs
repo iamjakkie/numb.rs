@@ -9,6 +9,9 @@ mod tests {
 
         let empty = vector![];
         assert_eq!(empty, Vector::new(vec![]));
+
+        let int = vector![1, 2, 3];
+        assert_eq!(int, Vector::new(vec![1, 2, 3]));
     }
 
     #[test]
