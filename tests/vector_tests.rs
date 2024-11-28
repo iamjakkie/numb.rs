@@ -27,4 +27,11 @@ mod tests {
         assert_eq!(v3, vector![-3.0, -3.0, -3.0]);
     }
 
+    #[test]
+    fn test_vector_mul() {
+        let v1 = vector![1.0, 2.0, 3.0];
+        let v2 = v1 * 2.0;
+        assert_eq!(v2, vector![2.0, 4.0, 6.0]);
+    }
+
 }

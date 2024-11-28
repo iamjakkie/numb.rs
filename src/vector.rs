@@ -42,3 +42,12 @@ impl<T: Float> Sub for Vector<T> {
         Self::new(elements)
     }
 }
+
+impl<T: Float> Mul<T> for Vector<T> {
+    type Output = Self;
+
+    fn mul(self, scalar: T) -> Self {
+        let elements = self.elements.iter().map(|&x| x * scalar).collect();
+        Self::new(elements)
+    }
+}
