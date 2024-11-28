@@ -4,3 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+num = "0.4"        # For Float trait
+ndarray = "0.15"   # Optional: For advanced array ops
+
+[dev-dependencies]
+criterion = "0.4"  # For benchmarks
