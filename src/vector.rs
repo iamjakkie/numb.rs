@@ -59,3 +59,20 @@ where
         Self::new(elements)
     }
 }
+
+impl<T, U> Mul<Vector<U>> for Vector<T>
+where
+    T: Num + Copy + From<U>, 
+    U: Num + Copy,
+{
+    type Output = T;
+
+    fn mul(self, other: Vector<U>) -> T {
+        assert_eq!(self.len(), other.len(), "Vectors must have the same length");
+        self.elements
+            .iter()
+            .zip(other.elements.iter())
+            .map(|(&a, &b)| a * T::from(b)) // Convert `b` to type `T`
+            .fold(T::zero(), |acc, x| acc + x) // Sum the results
+    }
+}
