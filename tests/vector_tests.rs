@@ -64,6 +64,16 @@ mod tests {
     }
 
     #[test]
+    fn test_vector_operators() {
+        let v1 = vector![2, 1, -1];
+        let v2 = vector![-1, 0, 3];
+        let result = v1*3 - v2*2;
+        assert_eq!(result, vector![8, 3, -9]);
+
+
+    }
+
+    #[test]
     fn test_vector_dot() {
         let v1 = vector![1.0, 2.0, 3.0];
         let v2 = vector![4.0, 5.0, 6.0];

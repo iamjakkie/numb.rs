@@ -68,7 +68,10 @@ where
 }
 
 
-impl<T: Float> Sub for Vector<T> {
+impl<T> Sub for Vector<T> 
+where
+    T: Num + Copy,
+{
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
