@@ -25,6 +25,12 @@ mod tests {
         let v2 = vector![1, -1, 2];
         let v3 = v1 + v2;
         assert_eq!(v3, vector![3, 4, 1]);
+
+        let v1 = vector![1, 2];
+        let v2 = vector![3, 1];
+        let v3 = vector![2, -1];
+        let result = v1 + v2 + v3;
+        assert_eq!(result, vector![6, 2]);
     }
 
     #[test]
