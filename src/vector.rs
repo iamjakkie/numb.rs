@@ -35,7 +35,10 @@ where
     }
 }
 
-impl<T: Float> Add for Vector<T> {
+impl<T> Add for Vector<T> 
+where
+    T: Num + Copy,
+{
     type Output = Self;
 
     fn add(self, other: Self) -> Self {

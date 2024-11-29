@@ -20,6 +20,11 @@ mod tests {
         let v2 = vector![4.0, 5.0, 6.0];
         let v3 = v1 + v2;
         assert_eq!(v3, vector![5.0, 7.0, 9.0]);
+
+        let v1 = vector![2, 5, -1];
+        let v2 = vector![1, -1, 2];
+        let v3 = v1 + v2;
+        assert_eq!(v3, vector![3, 4, 1]);
     }
 
     #[test]
