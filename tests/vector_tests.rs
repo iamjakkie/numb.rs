@@ -12,6 +12,18 @@ mod tests {
 
         let int = vector![1, 2, 3];
         assert_eq!(int, Vector::new(vec![1, 2, 3]));
+
+        let zeros = vector![0; 3];
+        assert_eq!(zeros, Vector::new(vec![0, 0, 0]));
+
+        let ones = vector![1; 5];
+        assert_eq!(ones, Vector::new(vec![1, 1, 1, 1, 1]));
+
+        let filled = vector![5.0; 4];
+        assert_eq!(filled, Vector::new(vec![5.0, 5.0, 5.0, 5.0]));
+
+        let filled_int = vector![5; 4];
+        assert_eq!(filled_int, Vector::new(vec![5, 5, 5, 5]));
     }
 
     #[test]

@@ -14,6 +14,24 @@ where
         Self { elements }
     }
 
+    pub fn zeros(length: usize) -> Self {
+        Self {
+            elements: vec![T::zero(); length],
+        }
+    }
+
+    pub fn ones(length: usize) -> Self {
+        Self {
+            elements: vec![T::one(); length],
+        }
+    }
+
+    pub fn filled(value: T, length: usize) -> Self {
+        Self {
+            elements: vec![value; length],
+        }
+    }
+
     pub fn len(&self) -> usize {
         self.elements.len()
     }
