@@ -1,11 +1,14 @@
 use std::ops::{Add, Sub, Mul, Div};
 use num::{Num, Float, ToPrimitive};
+use std::fmt::Debug;
 
 #[derive(Debug, Clone, PartialEq, Copy)]
-pub struct Vector<T, const N: usize> {
+pub struct Vector<T, const N: usize> 
+where 
+    T: Debug,
+{
     pub elements: [T;N],
 }
-
 pub struct Scalar<U>(pub U);
 
 impl<U> From<U> for Scalar<U> {
@@ -16,7 +19,7 @@ impl<U> From<U> for Scalar<U> {
 
 impl<T, const N: usize> Vector<T, N> 
 where
-    T: Num + Copy,
+    T: Debug + Num + Copy,
 {
     pub fn new(elements: [T;N]) -> Self {
         Self { elements }
@@ -61,19 +64,24 @@ where
 //     }
 // }
 
-// impl<'a, T> Add for &'a Vector<T> 
-// where
-//     T: Num + Copy,
-// {
-//     type Output = Self;
+impl<T, const N: usize> Add for Vector<T, N> 
+where
+    T: Debug + Num + Copy,
+{
+    type Output = Self;
 
-//     fn add(self, other: Self) -> Self {
-//         let elements = self.elements.iter().zip(other.elements.iter())
-//             .map(|(a, b)| *a + *b)
-//             .collect();
-//         Self::new(elements)
-//     }
-// }
+    fn add(self, other: Self) -> Self {
+        let elements = self
+            .elements
+            .iter()
+            .zip(other.elements.iter())
+            .map(|(a, b)| *a + *b)
+            .collect::<Vec<_>>()
+            .try_into()
+            .expect("Array conversion failed");
+        Self::new(elements)
+    }
+}
 
 
 // impl<T> Sub for Vector<T> 
