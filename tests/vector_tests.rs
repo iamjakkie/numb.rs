@@ -48,4 +48,15 @@ mod tests {
         assert_eq!(dot, 32.0);
     }
 
+    #[test]
+    fn test_vector_magnitude() {
+        let v = vector![1.0, 2.0, 3.0];
+        let mag = v.magnitude();
+        assert_eq!(mag, (14.0 as f64).sqrt());
+
+        let v = vector![1, 2, 3];
+        let mag = v.magnitude();
+        assert_eq!(mag, (14.0 as f64).sqrt());
+    }
+
 }

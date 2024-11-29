@@ -1,5 +1,5 @@
 use std::ops::{Add, Sub, Mul, Div};
-use num::{Num, Float};
+use num::{Num, Float, ToPrimitive};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Vector<T> {
@@ -16,6 +16,22 @@ where
 
     pub fn len(&self) -> usize {
         self.elements.len()
+    }
+}
+
+impl<T> Vector<T>
+where
+    T: Num + Copy + ToPrimitive,
+{
+    pub fn magnitude(&self) -> f64 {
+        self.elements
+            .iter()
+            .map(|&x| {
+                let x_f64 = x.to_f64().expect("Conversion to f64 failed");
+                x_f64 * x_f64
+            })
+            .sum::<f64>()
+            .sqrt()
     }
 }
 
