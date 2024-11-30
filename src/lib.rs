@@ -16,3 +16,11 @@ macro_rules! vector {
         Vector::<i32, SIZE>::new([])
     }};
 }
+#[macro_export]
+macro_rules! sqrt_vector {
+    ($($x:expr),+ $(,)?) => {
+        Vector::<f64, { [$($x),*].len() }>::new([
+            $(($x as f64).sqrt()),*
+        ])
+    };
+}
