@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use numbrs::{vector, Vector};
+    use num::integer::Roots;
+    use numbrs::{sqrt_vector, vector, Vector};
 
     #[test]
     fn test_vector_macro() {
@@ -105,6 +106,32 @@ mod tests {
         // let v2 = vector![-1,5,2,1];
         // let dot = v1 * v2;
         // assert_eq!(dot, 25);
+        let v = vector![-2,4];
+        let w = vector![2,1];
+        let dot = v * w;
+        assert_eq!(dot, 0.0);
+
+        let v = vector![1,2,3];
+        let w = vector![-3,2,-1];
+        let dot = v * w;
+        assert_eq!(dot, -2.0);
+
+        let v = vector![3,-1,0,1];
+        let w = vector![0,2,1,3];
+        let dot = v * w;
+        assert_eq!(dot, 1.0);
+
+        let v = sqrt_vector![2,3,5];
+        let w = v.clone();
+        println!("{:?} {:?}", v, w);
+        let dot = v * w;
+        assert_eq!(dot, 10.0);
+
+        let v: Vector<i32,9> = Vector::zeros();
+        let w = vector![8,1,5,-7,3,9,1,-3,2];
+        let dot = v * w;
+        assert_eq!(dot, 0.0);
+
     }
 
     #[test]
