@@ -86,8 +86,12 @@ mod tests {
         assert_eq!(result, vector![1,-2,-1]);
         let result = v1 + v2*2 + v3*2 + v4*2;
         assert_eq!(result, vector![6, 12, 2]);
-
-
+        let result = v1 + v4;
+        assert_eq!(result, vector![3,2,1]);
+        let result = v2*4 + v2*3 - (v2*2 + v2*6);
+        assert_eq!(result, vector![1,-2,-1]);
+        let result = v3*4 - v2*2;
+        assert_eq!(result, vector![6,4,-2]);
     }
 
     #[test]
@@ -96,6 +100,11 @@ mod tests {
         let v2 = vector![4.0, 5.0, 6.0];
         let dot = v1 * v2;
         assert_eq!(dot, 32.0);
+        // TODO: assert impossible
+        // let v1 = vector![3,6,2];
+        // let v2 = vector![-1,5,2,1];
+        // let dot = v1 * v2;
+        // assert_eq!(dot, 25);
     }
 
     #[test]
@@ -107,6 +116,23 @@ mod tests {
         let v = vector![1, 2, 3];
         let mag = v.magnitude();
         assert_eq!(mag, (14.0 as f64).sqrt());
+
+        let v = vector![2,-5,4,6];
+        let mag = v.magnitude();
+        assert_eq!(mag, 9.0);
+    }
+
+    #[test]
+    fn test_vector_angles() {
+        let v = vector![1,2];
+        let w = vector![3,4];
+        let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
+        assert_eq!(angle, 0.1799);
+
+        let v = vector![1,2,-1,-2];
+        let w = vector![1,-1,1,-1];
+        let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
+        assert_eq!(angle, 1.5708)
     }
 
 }
