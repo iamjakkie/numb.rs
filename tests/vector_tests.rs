@@ -147,6 +147,24 @@ mod tests {
         let v = vector![2,-5,4,6];
         let mag = v.magnitude();
         assert_eq!(mag, 9.0);
+
+        let v = vector![3,4];
+        let mag = v.magnitude();
+        assert_eq!(mag, 5.0);
+
+        let v = vector![2,1,-2];
+        let mag = v.magnitude();
+        assert_eq!(mag, 3.0);
+
+        let elements = [
+            -2.0 * (2.0_f64).sqrt(), // -2√2
+            -3.0,                   // -3
+            (10.0_f64).sqrt(),      // √10
+            3.0                     // 3
+        ];
+        let v = Vector::new(elements);
+        let mag = v.magnitude();
+        assert_eq!(mag, 6.0);
     }
 
     #[test]
