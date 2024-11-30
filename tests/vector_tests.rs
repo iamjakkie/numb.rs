@@ -177,7 +177,30 @@ mod tests {
         let v = vector![1,2,-1,-2];
         let w = vector![1,-1,1,-1];
         let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
-        assert_eq!(angle, 1.5708)
+        assert_eq!(angle, 1.5708);
+
+        let v_elements = [
+            1.0,
+            3.0_f64.sqrt(),
+        ];
+        let w_elements = [
+            3.0_f64.sqrt(),
+            1.0,
+        ];
+        let v = Vector::new(v_elements);
+        let w = Vector::new(w_elements);
+        let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
+        assert_eq!(angle, 0.5236);
+
+        let v = vector![0,-2,2];
+        let w = vector![1,0,1];
+        let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
+        assert_eq!(angle, 1.0472);
+
+        let v = vector![1,1,1,1];
+        let w = vector![-2,0,-2,0];
+        let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
+        assert_eq!(angle, 2.3562);
     }
 
 }
