@@ -62,6 +62,28 @@ where
             .sum::<f64>()
             .sqrt()
     }
+
+    pub fn angle_between(&self, other: &Self) -> f64 {
+        assert_eq!(self.len(), other.len(), "Vectors must have the same length");
+
+        let dot_product: f64 = self
+            .elements
+            .iter()
+            .zip(other.elements.iter())
+            .map(|(&a, &b)| {
+                let a_f64 = a.to_f64().expect("Conversion to f64 failed");
+                let b_f64 = b.to_f64().expect("Conversion to f64 failed");
+                a_f64 * b_f64
+            })
+            .sum();
+
+        let magnitude_a = self.magnitude();
+        let magnitude_b = other.magnitude();
+
+        // Compute cos(theta) and then use arccos
+        let cos_theta = dot_product / (magnitude_a * magnitude_b);
+        cos_theta.acos()
+    }
 }
 
 impl<T, const N: usize> Add for Vector<T, N> 
