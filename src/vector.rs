@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, Sub, Mul};
 use num::{Num, Float, ToPrimitive};
 use std::fmt::Debug;
 
@@ -149,19 +149,24 @@ where
 
 impl<T, U, const N: usize> Mul<Vector<U, N>> for Vector<T, N>
 where
-    T: Debug + Num + Copy + From<U>,
-    U: Debug + Num + Copy,
+    T: Num + Copy + ToPrimitive + Debug,
+    U: Num + Copy + ToPrimitive + Debug,
 {
-    type Output = T;
+    type Output = f64; // Dot product results in f64 for precision
 
-    fn mul(self, other: Vector<U, N>) -> T {
+    fn mul(self, other: Vector<U, N>) -> f64 {
         self.elements
             .iter()
             .zip(other.elements.iter())
-            .map(|(&a, &b)| a * T::from(b))
-            .fold(T::zero(), |acc, x| acc + x)
+            .map(|(&a, &b)| {
+                let a_f64 = a.to_f64().expect("Conversion to f64 failed");
+                let b_f64 = b.to_f64().expect("Conversion to f64 failed");
+                a_f64 * b_f64
+            })
+            .sum()
     }
 }
+
 
 impl<T, U, const N: usize> Mul<Vector<T, N>> for Scalar<U>
 where
