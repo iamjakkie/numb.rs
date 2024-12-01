@@ -29,22 +29,18 @@ macro_rules! sqrt_vector {
 
 #[macro_export]
 macro_rules! matrix {
-    ($($($x:expr),+);+ $(,)?) => {{
-        const ROWS: usize = [$([$($x),*]),*].len();
-        const COLS: usize = [$($($x),*),*].len() / ROWS;
-        Matrix::<_, ROWS, COLS>::new([
-            [$($($x),*),*]
-        ])
+    ($([$($x:expr),+ $(,)?]),+ $(,)?) => {{
+        let elements = [
+            $([$($x),*],)*
+        ];
+        Matrix::new(elements)
     }};
-    ($value:expr; $rows:expr, $cols:expr) => {
-        Matrix::<_, $rows, $cols>::new([[$value; $cols]; $rows])
+    ($value:expr; $N_size:expr, $M_size:expr) => {
+        Matrix::<_, $N_size, $M_size>::new([[$value; $N_size]; $M_size])
     };
     () => {{
-        const ROWS: usize = 0;
-        const COLS: usize = 0;
-        Matrix::<i32, ROWS, COLS>::new([[]])
-    }};
-    () => {
-        
-    };
+        const M: usize = 0;
+        const N: usize = 0;
+        Matrix::<i32, M, N>::new([])
+    }}
 }
