@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod tests {
-    use num::integer::Roots;
     use numbrs::{sqrt_vector, vector, Vector};
 
     #[test]
@@ -17,8 +16,14 @@ mod tests {
         let zeros = vector![0; 3];
         assert_eq!(zeros, Vector::new([0, 0, 0]));
 
+        let zeros_float = vector![0.0; 3];
+        assert_eq!(zeros_float, Vector::new([0.0, 0.0, 0.0]));
+
         let ones = vector![1; 5];
         assert_eq!(ones, Vector::new([1, 1, 1, 1, 1]));
+
+        let ones_float = vector![1.0; 5];
+        assert_eq!(ones_float, Vector::new([1.0, 1.0, 1.0, 1.0, 1.0]));
 
         let filled = vector![5.0; 4];
         assert_eq!(filled, Vector::new([5.0, 5.0, 5.0, 5.0]));
