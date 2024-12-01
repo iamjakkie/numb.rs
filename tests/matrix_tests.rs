@@ -62,6 +62,105 @@ mod tests {
             [5.0,5.0],
             [5.0,5.0],
         ]));
-            
     }
+
+    #[test]
+    fn test_matrix_add() {
+        let A = matrix![
+            [1,3],
+            [2,-1],
+        ];
+        let B = matrix![
+            [2,1],
+            [0,1],
+        ];
+        let C = matrix![
+            [1,0,1],
+            [0,-1,1],
+        ];
+
+        let res = A + B;
+        assert_eq!(res, matrix![
+            [3,4],
+            [2,0],
+        ]);
+    }
+
+    #[test]
+    fn test_matrix_mul() {
+        let A = matrix![
+            [1,3],
+            [2,-1],
+        ];
+        let res = A * 2;
+        assert_eq!(res, matrix![
+            [2,6],
+            [4,-2],
+        ]);
+
+        let B = matrix![
+            [2,1],
+            [0,1],
+        ];
+        let res = B * 3;
+        assert_eq!(res, matrix![
+            [6,3],
+            [0,3],
+        ]);
+
+        let A = matrix![
+            [1,2],
+            [3,4],
+        ];
+        let B = matrix![
+            [5,6,7],
+            [8,9,10],
+        ];
+        let C = matrix![
+            [1,0],
+            [0,-1],
+            [2,-1],
+        ];
+
+        let res = A * B;
+        assert_eq!(res, matrix![
+            [21,24,27],
+            [47,54,61],
+        ]);
+
+        let res = B * C;
+        assert_eq!(res, matrix![
+            [19,-13],
+            [28,-19],
+        ]);
+    }
+
+    #[test]
+    fn test_matrix_operators() {
+        let A = matrix![
+            [1,3],
+            [2,-1],
+        ];
+        let B = matrix![
+            [2,1],
+            [0,1],
+        ];
+        let C = matrix![
+            [1,0,1],
+            [0,-1,1],
+        ];
+
+        let res = A * 2 - B * 3;
+        assert_eq!(res, matrix![
+            [-4,3],
+            [4,-5],
+        ]);
+
+        // let res = A + C * 2;
+        // assert_!(res, matrix![
+        //     [3,3],
+        //     [2,-3],
+        // ]);
+    }
+
 }
