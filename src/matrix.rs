@@ -2,6 +2,8 @@ use std::ops::{Add, Sub, Mul, BitXor};
 use num::{Num, ToPrimitive};
 use std::fmt::Debug;
 
+use crate::Vector;
+
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub struct Matrix<T, const M: usize, const N: usize> 
 where 
@@ -196,5 +198,24 @@ where
         }
 
         result
+    }
+}
+
+impl<T, const M: usize, const N: usize> Mul<Vector<T, N>> for Matrix<T, M, N>
+where
+    T: Debug + Num + Copy,
+{
+    type Output = Vector<T, M>;
+
+    fn mul(self, vector: Vector<T, N>) -> Self::Output {
+        let mut result = [T::zero(); M];
+
+        for i in 0..M {
+            for j in 0..N {
+                result[i] = result[i] + (self.elements[i][j] * vector.elements[j]);
+            }
+        }
+
+        Vector::new(result)
     }
 }
