@@ -151,6 +151,15 @@ where
     }
 }
 
+impl<T, const N: usize> PartialEq<ColumnVector<T, N>> for ColumnVector<T, N>
+where
+    T: PartialEq + Copy + Debug + Num + ToPrimitive,
+{
+    fn eq(&self, other: &ColumnVector<T, N>) -> bool {
+        self.0 == other.0
+    }
+}
+
 impl<T, const N: usize> Copy for ColumnVector<T, N>
 where
     T: Copy + Debug + Num + ToPrimitive,
@@ -351,7 +360,7 @@ impl<T, const M: usize, const N: usize> Mul<ColumnVector<T, N>> for Matrix<T, M,
 where
     T: Debug + Num + Copy +ToPrimitive,
 {
-    type Output = Matrix<T, M, 1>; // Result is a column vector
+    type Output = ColumnVector<T, M>;
 
     fn mul(self, vector: ColumnVector<T, N>) -> Self::Output {
         let mut result = [[T::zero(); 1]; M]; // M rows, 1 column
@@ -362,7 +371,7 @@ where
             }
         }
 
-        Matrix::new(result)
+        ColumnVector::new(Matrix::new(result))
     }
 }
 
