@@ -456,6 +456,40 @@ where
     }
 }
 
+impl<T, const N: usize, const M: usize> Mul<RowVector<T, M>> for ColumnVector<T, N>
+where
+    T: Debug + Num + Copy + ToPrimitive,
+{
+    type Output = Matrix<T, N, M>; // Result is a matrix
+
+    fn mul(self, other: RowVector<T, M>) -> Self::Output {
+        let mut result = [[T::zero(); M]; N]; // Create a zero-initialized matrix of size N x M
+
+        for i in 0..N {
+            for j in 0..M {
+                result[i][j] = self.0.elements[i][0] * other.0.elements[0][j];
+            }
+        }
+
+        Matrix::new(result)
+    }
+}
+
+impl<T, const N: usize> Mul<ColumnVector<T, N>> for RowVector<T, N>
+where
+    T: Debug + Num + Copy + ToPrimitive,
+{
+    type Output = T; // Result is a scalar (dot product)
+
+    fn mul(self, other: ColumnVector<T, N>) -> Self::Output {
+        self.0.elements[0]
+            .iter()
+            .zip(other.0.elements.iter())
+            .map(|(&row_val, &[col_val])| row_val * col_val)
+            .fold(T::zero(), |acc, x| acc + x)
+    }
+}
+
 
 
 impl<T, const N: usize> BitXor<u32> for Matrix<T, N, N>
