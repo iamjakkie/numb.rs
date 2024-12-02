@@ -2,7 +2,6 @@ use std::ops::{Add, Sub, Mul, BitXor};
 use num::{Num, ToPrimitive};
 use std::fmt::Debug;
 
-use crate::Vector;
 
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub struct Matrix<T, const M: usize, const N: usize> 
@@ -61,6 +60,89 @@ where
     }
 }
 
+#[derive(Debug)]
+pub struct RowVector<T, const N: usize>(pub Matrix<T, 1, N>)
+where 
+    T: Debug + Num + Copy;
+
+impl<T, const N: usize> RowVector<T,N>
+where
+    T: Debug + Num + Copy,
+{
+    pub fn new(matrix: Matrix<T, 1, N>) -> Self {
+        RowVector(matrix)
+    }
+}
+
+#[derive(Debug)]
+pub struct ColumnVector<T, const N: usize>(Matrix<T, N, 1>)
+where 
+    T: Debug + Num + Copy;
+
+impl<T, const M: usize> ColumnVector<T, M>
+where
+    T: Debug + Num + Copy,
+{
+    pub fn new(matrix: Matrix<T, M, 1>) -> Self {
+        ColumnVector(matrix)
+    }
+}
+
+impl<T, const N: usize> Copy for RowVector<T, N>
+where
+    T: Copy + Debug + Num,
+{}
+
+impl<T, const N: usize> Clone for RowVector<T, N>
+where
+    T: Copy + Debug + Num,
+{
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+impl<T, const N: usize> PartialEq<Matrix<T, 1, N>> for RowVector<T, N>
+where
+    T: PartialEq + Copy + Debug + Num,
+{
+    fn eq(&self, other: &Matrix<T, 1, N>) -> bool {
+        self.0 == *other
+    }
+}
+
+impl<T, const N: usize> PartialEq<RowVector<T, N>> for RowVector<T, N>
+where
+    T: PartialEq + Copy + Debug + Num,
+{
+    fn eq(&self, other: &RowVector<T, N>) -> bool {
+        self.0 == other.0
+    }
+}
+
+impl<T, const N: usize> PartialEq<Matrix<T, N, 1>> for ColumnVector<T, N>
+where
+    T: PartialEq + Copy + Debug + Num,
+{
+    fn eq(&self, other: &Matrix<T, N, 1>) -> bool {
+        self.0 == *other
+    }
+}
+
+impl<T, const N: usize> Copy for ColumnVector<T, N>
+where
+    T: Copy + Debug + Num,
+{}
+
+impl<T, const N: usize> Clone for ColumnVector<T, N>
+where
+    T: Copy + Debug + Num,
+{
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
 impl<T, const M: usize, const N: usize> Add for Matrix<T, M, N>
 where
     T: Debug + Num + Copy,
@@ -92,6 +174,55 @@ where
     }
 }
 
+// impl<T, const N: usize> Add for RowVector<T, N>
+// where
+//     T: Debug + Num + Copy,
+// {
+//     type Output = Self;
+
+//     fn add(self, other: Self) -> Self {
+//         Self(self.0 + other.0) // Use the `Matrix`'s `Add` implementation
+//     }
+// }
+// impl<T, const M: usize, const N: usize> Add for &Matrix<T, M, N>
+// where
+//     T: Debug + Num + Copy,
+// {
+//     type Output = Matrix<T, M, N>;
+
+//     fn add(self, other: Self) -> Self::Output {
+//         let mut result = [[T::zero(); N]; M];
+//         for i in 0..M {
+//             for j in 0..N {
+//                 result[i][j] = self.elements[i][j] + other.elements[i][j];
+//             }
+//         }
+//         Matrix::new(result)
+//     }
+// }
+impl<T, const N: usize> Add for RowVector<T, N>
+where
+    T: Debug + Num + Copy,
+{
+    type Output = RowVector<T, N>;
+
+    fn add(self, other: Self) -> Self {
+        RowVector(self.0 + other.0) // Use `Matrix`'s `Add` for owned values
+    }
+}
+
+
+impl<T, const N: usize> Add for ColumnVector<T, N>
+where
+    T: Debug + Num + Copy,
+{
+    type Output = ColumnVector<T, N>;
+
+    fn add(self, other: Self) -> Self {
+        ColumnVector(self.0 + other.0) // Use the `Matrix`'s `Add` implementation
+    }
+}
+
 impl<T, const M: usize, const N: usize> Sub for Matrix<T, M, N>
 where
     T: Debug + Num + Copy,
@@ -120,6 +251,28 @@ where
             .expect("Matrix size mismatch");
 
         Self::new(elements)
+    }
+}
+
+impl<T, const N: usize> Sub for RowVector<T, N>
+where
+    T: Debug + Num + Copy,
+{
+    type Output = RowVector<T, N>;
+
+    fn sub(self, other: Self) -> Self {
+        RowVector(self.0 - other.0) // Delegate to `Matrix`'s `Sub` implementation
+    }
+}
+
+impl<T, const N: usize> Sub for ColumnVector<T, N>
+where
+    T: Debug + Num + Copy,
+{
+    type Output = ColumnVector<T, N>;
+
+    fn sub(self, other: Self) -> Self {
+        ColumnVector(self.0 - other.0) // Delegate to `Matrix`'s `Sub` implementation
     }
 }
 
@@ -172,6 +325,108 @@ where
     }
 }
 
+impl<T, const M: usize, const N: usize> Mul<ColumnVector<T, N>> for Matrix<T, M, N>
+where
+    T: Debug + Num + Copy,
+{
+    type Output = Matrix<T, M, 1>; // Result is a column vector
+
+    fn mul(self, vector: ColumnVector<T, N>) -> Self::Output {
+        let mut result = [[T::zero(); 1]; M]; // M rows, 1 column
+
+        for i in 0..M {
+            for j in 0..N {
+                result[i][0] = result[i][0] + (self.elements[i][j] * vector.0.elements[j][0]);
+            }
+        }
+
+        Matrix::new(result)
+    }
+}
+
+impl<T, const M: usize, const N: usize> Mul<Matrix<T, M, N>> for RowVector<T, M>
+where
+    T: Debug + Num + Copy,
+{
+    type Output = Matrix<T, 1, N>; // Result is a row vector
+
+    fn mul(self, matrix: Matrix<T, M, N>) -> Self::Output {
+        let mut result = [[T::zero(); N]; 1]; // 1 row, N columns
+
+        for i in 0..N {
+            for j in 0..M {
+                result[0][i] = result[0][i] + (self.0.elements[0][j] * matrix.elements[j][i]);
+            }
+        }
+
+        Matrix::new(result)
+    }
+}
+
+impl<T, const N: usize> Mul<RowVector<T, N>> for RowVector<T, N>
+where
+    T: Debug + Num + Copy + ToPrimitive,
+{
+    type Output = f64;
+
+    fn mul(self, other: RowVector<T, N>) -> f64 {
+        self.0.elements[0]
+            .iter()
+            .zip(other.0.elements[0].iter())
+            .map(|(&a, &b)| {
+                let a_f64 = a.to_f64().expect("Conversion to f64 failed");
+                let b_f64 = b.to_f64().expect("Conversion to f64 failed");
+                a_f64 * b_f64
+            })
+            .sum()
+    }
+}
+
+impl<T, const N: usize> Mul<ColumnVector<T, N>> for ColumnVector<T, N>
+where
+    T: Debug + Num + Copy + ToPrimitive,
+{
+    type Output = f64;
+
+    fn mul(self, other: ColumnVector<T, N>) -> f64 {
+        self.0.elements
+            .iter()
+            .zip(other.0.elements.iter())
+            .map(|([a], [b])| {
+                let a_f64 = a.to_f64().expect("Conversion to f64 failed");
+                let b_f64 = b.to_f64().expect("Conversion to f64 failed");
+                a_f64 * b_f64
+            })
+            .sum()
+    }
+}
+
+impl<T, U, const N: usize> Mul<U> for RowVector<T, N>
+where
+    T: Debug + Num + Copy + From<U>,
+    U: Num + Copy,
+{
+    type Output = Self;
+
+    fn mul(self, scalar: U) -> Self {
+        Self(self.0 * scalar) // Delegate to `Matrix`'s `Mul` implementation
+    }
+}
+
+impl<T, U, const N: usize> Mul<U> for ColumnVector<T, N>
+where
+    T: Debug + Num + Copy + From<U>,
+    U: Num + Copy,
+{
+    type Output = Self;
+
+    fn mul(self, scalar: U) -> Self {
+        Self(self.0 * scalar) // Delegate to `Matrix`'s `Mul` implementation
+    }
+}
+
+
+
 impl<T, const N: usize> BitXor<u32> for Matrix<T, N, N>
 where
     T: Debug + Num + Copy,
@@ -211,21 +466,21 @@ where
     }
 }
 
-impl<T, const M: usize, const N: usize> Mul<Vector<T, N>> for Matrix<T, M, N>
-where
-    T: Debug + Num + Copy,
-{
-    type Output = Vector<T, M>;
+// impl<T, const M: usize, const N: usize> Mul<Vector<T, N>> for Matrix<T, M, N>
+// where
+//     T: Debug + Num + Copy,
+// {
+//     type Output = Vector<T, M>;
 
-    fn mul(self, vector: Vector<T, N>) -> Self::Output {
-        let mut result = [T::zero(); M];
+//     fn mul(self, vector: Vector<T, N>) -> Self::Output {
+//         let mut result = [T::zero(); M];
 
-        for i in 0..M {
-            for j in 0..N {
-                result[i] = result[i] + (self.elements[i][j] * vector.elements[j]);
-            }
-        }
+//         for i in 0..M {
+//             for j in 0..N {
+//                 result[i] = result[i] + (self.elements[i][j] * vector.elements[j]);
+//             }
+//         }
 
-        Vector::new(result)
-    }
-}
+//         Vector::new(result)
+//     }
+// }
