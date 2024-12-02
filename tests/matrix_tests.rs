@@ -136,6 +136,50 @@ mod tests {
     }
 
     #[test]
+    fn test_matrix_identity() {
+        let I = identity_matrix!(f64, 3);
+        assert_eq!(I, matrix![
+            [1.0,0.0,0.0],
+            [0.0,1.0,0.0],
+            [0.0,0.0,1.0],
+        ]);
+
+        let I = identity_matrix!(i32, 4);
+        assert_eq!(I, matrix![
+            [1,0,0,0],
+            [0,1,0,0],
+            [0,0,1,0],
+            [0,0,0,1],
+        ]);
+    }
+
+    #[test]
+    fn test_matrix_power() {
+        let A = matrix![
+            [2,1],
+            [-1,3],
+        ];
+        let res = A ^ 2;
+        assert_eq!(res, matrix![
+            [3,5],
+            [-5,8],
+        ]);
+
+        let res = A ^ 4;
+        assert_eq!(res, matrix![
+            [-16,55],
+            [-55,39],
+        ]);
+
+        let I = identity_matrix!(i32, 2);
+        let res = I ^ 3;
+        assert_eq!(res, matrix![
+            [1,0],
+            [0,1],
+        ]);
+    }
+
+    #[test]
     fn test_matrix_operators() {
         let A = matrix![
             [1,3],
@@ -161,24 +205,8 @@ mod tests {
         //     [3,3],
         //     [2,-3],
         // ]);
-    }
 
-    #[test]
-    fn test_matrix_identity() {
-        let I = identity_matrix!(f64, 3);
-        assert_eq!(I, matrix![
-            [1.0,0.0,0.0],
-            [0.0,1.0,0.0],
-            [0.0,0.0,1.0],
-        ]);
-
-        let I = identity_matrix!(i32, 4);
-        assert_eq!(I, matrix![
-            [1,0,0,0],
-            [0,1,0,0],
-            [0,0,1,0],
-            [0,0,0,1],
-        ]);
+        
     }
 
 }

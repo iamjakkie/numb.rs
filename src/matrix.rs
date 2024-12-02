@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, Sub, Mul, BitXor};
 use num::{Num, ToPrimitive};
 use std::fmt::Debug;
 
@@ -157,5 +157,44 @@ where
         }
 
         Matrix::new(result)
+    }
+}
+
+impl<T, const N: usize> BitXor<u32> for Matrix<T, N, N>
+where
+    T: Debug + Num + Copy,
+{
+    type Output = Self;
+
+    fn bitxor(self, exponent: u32) -> Self::Output {
+        // If exponent is zero, return the identity matrix
+        if exponent == 0 {
+            let mut identity = Self::zeros();
+            for i in 0..N {
+                identity.elements[i][i] = T::one();
+            }
+            return identity;
+        }
+
+        // Initialize result to the identity matrix
+        let mut result = Self::zeros();
+        for i in 0..N {
+            result.elements[i][i] = T::one();
+        }
+
+        // Start base as the current matrix
+        let mut base = self;
+        let mut exp = exponent;
+
+        // Repeated squaring algorithm
+        while exp > 0 {
+            if exp % 2 == 1 {
+                result = result * base.clone(); // Multiply when the current bit is set
+            }
+            base = base.clone() * base; // Square the base
+            exp /= 2;
+        }
+
+        result
     }
 }
