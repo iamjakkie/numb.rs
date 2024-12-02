@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use numbrs::{matrix, Matrix};
+    use numbrs::{identity_matrix, matrix, Matrix};
 
     #[test]
     fn test_matrix_macro() {
@@ -161,6 +161,24 @@ mod tests {
         //     [3,3],
         //     [2,-3],
         // ]);
+    }
+
+    #[test]
+    fn test_matrix_identity() {
+        let I = identity_matrix!(f64, 3);
+        assert_eq!(I, matrix![
+            [1.0,0.0,0.0],
+            [0.0,1.0,0.0],
+            [0.0,0.0,1.0],
+        ]);
+
+        let I = identity_matrix!(i32, 4);
+        assert_eq!(I, matrix![
+            [1,0,0,0],
+            [0,1,0,0],
+            [0,0,1,0],
+            [0,0,0,1],
+        ]);
     }
 
 }
