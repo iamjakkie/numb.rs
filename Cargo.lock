@@ -365,6 +365,7 @@ dependencies = [
  "criterion",
  "ndarray",
  "num",
+ "num-traits",
 ]
 
 [[package]]
