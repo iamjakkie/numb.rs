@@ -1,3 +1,4 @@
+
 mod vector;
 mod matrix;
 
@@ -43,4 +44,15 @@ macro_rules! matrix {
         const N: usize = 0;
         Matrix::<i32, M, N>::new([])
     }}
+}
+
+#[macro_export]
+macro_rules! identity_matrix {
+    ($type:ty, $size:expr) => {{
+        let mut elements = [[<$type as num_traits::Zero>::zero(); $size]; $size];
+        for i in 0..$size {
+            elements[i][i] = <$type as num_traits::One>::one();
+        }
+        Matrix::<$type, $size, $size>::new(elements)
+    }};
 }
