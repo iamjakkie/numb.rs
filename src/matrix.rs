@@ -36,6 +36,14 @@ where
         }
     }
 
+    pub fn identity() -> Self {
+        let mut elements = [[T::zero(); N]; M];
+        for i in 0..M {
+            elements[i][i] = T::one();
+        }
+        Self { elements }
+    }
+
     pub fn len(&self) -> usize {
         M*N
     }
