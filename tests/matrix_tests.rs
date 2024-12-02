@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use numbrs::{identity_matrix, matrix, Matrix};
+    use numbrs::{identity_matrix, matrix, vector, Matrix, Vector};
 
     #[test]
     fn test_matrix_macro() {
@@ -206,7 +206,52 @@ mod tests {
         //     [2,-3],
         // ]);
 
-        
+        let A = matrix![
+            [1,2],
+            [3,4],
+        ];
+        let v = vector![2,-1];
+        let res = A * v;
+        assert_eq!(res, vector![0,2]);
+
+    }
+
+    #[test]
+    fn test_matrix_transpose() {
+        let A = matrix![
+            [1,2],
+            [3,4],
+        ];
+        let B = matrix![
+            [-1,1,1],
+            [0,1,0],
+        ];
+        let res = A.transpose();
+        assert_eq!(res, matrix![
+            [1,3],
+            [2,4],
+        ]);
+
+        let res = B.transpose();
+        assert_eq!(res, matrix![
+            [-1,0],
+            [1,1],
+            [1,0],
+        ]);
+
+        let res = (A * B).transpose();
+        assert_eq!(res, matrix![
+            [-1,-3],
+            [3,7],
+            [1,3],
+        ]);
+
+        let res = B.transpose() * A.transpose();
+        assert_eq!(res, matrix![
+            [-1,-3],
+            [3,7],
+            [1,3],
+        ]);
     }
 
 }
