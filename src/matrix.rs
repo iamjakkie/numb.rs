@@ -46,6 +46,16 @@ where
         Self { elements }
     }
 
+    pub fn transpose(self) -> Matrix<T, N, M> {
+        let mut elements = [[T::zero(); M]; N];
+        for i in 0..M {
+            for j in 0..N {
+                elements[j][i] = self.elements[i][j];
+            }
+        }
+        Matrix::new(elements)
+    }
+
     pub fn len(&self) -> usize {
         M*N
     }
