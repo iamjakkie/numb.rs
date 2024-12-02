@@ -63,39 +63,61 @@ where
 #[derive(Debug)]
 pub struct RowVector<T, const N: usize>(pub Matrix<T, 1, N>)
 where 
-    T: Debug + Num + Copy;
+    T: Debug + Num + Copy + ToPrimitive;
 
 impl<T, const N: usize> RowVector<T,N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     pub fn new(matrix: Matrix<T, 1, N>) -> Self {
         RowVector(matrix)
+    }
+
+    pub fn magnitude(&self) -> f64 {
+        self.0.elements[0]
+            .iter()
+            .map(|&x| {
+                let x_f64 = x.to_f64().expect("Conversion to f64 failed");
+                x_f64 * x_f64
+            })
+            .sum::<f64>()
+            .sqrt()
     }
 }
 
 #[derive(Debug)]
 pub struct ColumnVector<T, const N: usize>(Matrix<T, N, 1>)
 where 
-    T: Debug + Num + Copy;
+    T: Debug + Num + Copy + ToPrimitive;
 
 impl<T, const M: usize> ColumnVector<T, M>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     pub fn new(matrix: Matrix<T, M, 1>) -> Self {
         ColumnVector(matrix)
+    }
+
+    pub fn magnitude(&self) -> f64 {
+        self.0.elements[0]
+            .iter()
+            .map(|&x| {
+                let x_f64 = x.to_f64().expect("Conversion to f64 failed");
+                x_f64 * x_f64
+            })
+            .sum::<f64>()
+            .sqrt()
     }
 }
 
 impl<T, const N: usize> Copy for RowVector<T, N>
 where
-    T: Copy + Debug + Num,
+    T: Copy + Debug + Num + ToPrimitive,
 {}
 
 impl<T, const N: usize> Clone for RowVector<T, N>
 where
-    T: Copy + Debug + Num,
+    T: Copy + Debug + Num + ToPrimitive,
 {
     fn clone(&self) -> Self {
         *self
@@ -104,7 +126,7 @@ where
 
 impl<T, const N: usize> PartialEq<Matrix<T, 1, N>> for RowVector<T, N>
 where
-    T: PartialEq + Copy + Debug + Num,
+    T: PartialEq + Copy + Debug + Num + ToPrimitive,
 {
     fn eq(&self, other: &Matrix<T, 1, N>) -> bool {
         self.0 == *other
@@ -113,7 +135,7 @@ where
 
 impl<T, const N: usize> PartialEq<RowVector<T, N>> for RowVector<T, N>
 where
-    T: PartialEq + Copy + Debug + Num,
+    T: PartialEq + Copy + Debug + Num + ToPrimitive,
 {
     fn eq(&self, other: &RowVector<T, N>) -> bool {
         self.0 == other.0
@@ -122,7 +144,7 @@ where
 
 impl<T, const N: usize> PartialEq<Matrix<T, N, 1>> for ColumnVector<T, N>
 where
-    T: PartialEq + Copy + Debug + Num,
+    T: PartialEq + Copy + Debug + Num + ToPrimitive,
 {
     fn eq(&self, other: &Matrix<T, N, 1>) -> bool {
         self.0 == *other
@@ -131,12 +153,12 @@ where
 
 impl<T, const N: usize> Copy for ColumnVector<T, N>
 where
-    T: Copy + Debug + Num,
+    T: Copy + Debug + Num + ToPrimitive,
 {}
 
 impl<T, const N: usize> Clone for ColumnVector<T, N>
 where
-    T: Copy + Debug + Num,
+    T: Copy + Debug + Num + ToPrimitive,
 {
     fn clone(&self) -> Self {
         *self
@@ -202,7 +224,7 @@ where
 // }
 impl<T, const N: usize> Add for RowVector<T, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = RowVector<T, N>;
 
@@ -214,7 +236,7 @@ where
 
 impl<T, const N: usize> Add for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = ColumnVector<T, N>;
 
@@ -256,7 +278,7 @@ where
 
 impl<T, const N: usize> Sub for RowVector<T, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = RowVector<T, N>;
 
@@ -267,7 +289,7 @@ where
 
 impl<T, const N: usize> Sub for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = ColumnVector<T, N>;
 
@@ -327,7 +349,7 @@ where
 
 impl<T, const M: usize, const N: usize> Mul<ColumnVector<T, N>> for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy +ToPrimitive,
 {
     type Output = Matrix<T, M, 1>; // Result is a column vector
 
@@ -346,7 +368,7 @@ where
 
 impl<T, const M: usize, const N: usize> Mul<Matrix<T, M, N>> for RowVector<T, M>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = Matrix<T, 1, N>; // Result is a row vector
 
@@ -403,7 +425,7 @@ where
 
 impl<T, U, const N: usize> Mul<U> for RowVector<T, N>
 where
-    T: Debug + Num + Copy + From<U>,
+    T: Debug + Num + Copy + From<U> + ToPrimitive,
     U: Num + Copy,
 {
     type Output = Self;
@@ -415,7 +437,7 @@ where
 
 impl<T, U, const N: usize> Mul<U> for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + From<U>,
+    T: Debug + Num + Copy + From<U> + ToPrimitive,
     U: Num + Copy,
 {
     type Output = Self;
