@@ -120,17 +120,24 @@ mod tests {
         // let dot = v * w;
         // assert_eq!(dot, 0.0);
 
-        // let v = vector![1,2,3];
-        // let w = vector![-3,2,-1];
-        // let dot = v * w;
-        // assert_eq!(dot, -2.0);
+        let v = vector![[1,2,3]];
+        let w = vector![[-3,2,-1]];
+        let dot = v * w;
+        assert_eq!(dot, -2.0);
 
-        // let v = vector![3,-1,0,1];
-        // let w = vector![0,2,1,3];
-        // let dot = v * w;
-        // assert_eq!(dot, 1.0);
+        let v = vector![[3,-1,0,1]];
+        let w = vector![[0,2,1,3]];
+        let dot = v * w;
+        assert_eq!(dot, 1.0);
 
         // let v = sqrt_vector![2,3,5];
+        // let sqrt2 = 2.0_f64.sqrt();
+        // let sqrt3 = 3.0_f64.sqrt();
+        // let sqrt5 = 5.0_f64.sqrt();
+
+        // TODO how to support this
+
+        // let v = vector![[sqrt2, sqrt3, sqrt5]];
         // let w = v.clone();
         // println!("{:?} {:?}", v, w);
         // let dot = v * w;
@@ -142,48 +149,49 @@ mod tests {
         // assert_eq!(dot, 0.0);
     }
 
-    // #[test]
-    // fn test_vector_magnitude() {
-    //     let v = vector![1.0, 2.0, 3.0];
-    //     let mag = v.magnitude();
-    //     assert_eq!(mag, (14.0 as f64).sqrt());
+    #[test]
+    fn test_vector_magnitude() {
+        let v = vector![[1.0, 2.0, 3.0]];
+        let mag = v.magnitude();
+        assert_eq!(mag, (14.0 as f64).sqrt());
 
-    //     let v = vector![1, 2, 3];
-    //     let mag = v.magnitude();
-    //     assert_eq!(mag, (14.0 as f64).sqrt());
+        let v = vector![[1, 2, 3]];
+        let mag = v.magnitude();
+        assert_eq!(mag, (14.0 as f64).sqrt());
 
-    //     let v = vector![2,-5,4,6];
-    //     let mag = v.magnitude();
-    //     assert_eq!(mag, 9.0);
+        let v = vector![[2,-5,4,6]];
+        let mag = v.magnitude();
+        assert_eq!(mag, 9.0);
 
-    //     let v = vector![3,4];
-    //     let mag = v.magnitude();
-    //     assert_eq!(mag, 5.0);
+        let v = vector![[3,4]];
+        let mag = v.magnitude();
+        assert_eq!(mag, 5.0);
 
-    //     let v = vector![2,1,-2];
-    //     let mag = v.magnitude();
-    //     assert_eq!(mag, 3.0);
+        let v = vector![[2,1,-2]];
+        let mag = v.magnitude();
+        assert_eq!(mag, 3.0);
 
-    //     let elements = [
-    //         -2.0 * (2.0_f64).sqrt(), // -2√2
-    //         -3.0,                   // -3
-    //         (10.0_f64).sqrt(),      // √10
-    //         3.0                     // 3
-    //     ];
-    //     let v = Vector::new(elements);
-    //     let mag = v.magnitude();
-    //     assert_eq!(mag, 6.0);
-    // }
+        // TODO: how to support this?
+        // let elements = [
+        //     -2.0 * (2.0_f64).sqrt(), // -2√2
+        //     -3.0,                   // -3
+        //     (10.0_f64).sqrt(),      // √10
+        //     3.0                     // 3
+        // ];
+        // let v = Vector::new(elements);
+        // let mag = v.magnitude();
+        // assert_eq!(mag, 6.0);
+    }
 
     // #[test]
     // fn test_vector_angles() {
-    //     let v = vector![1,2];
-    //     let w = vector![3,4];
+    //     let v = vector![[1,2]];
+    //     let w = vector![[3,4]];
     //     let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
     //     assert_eq!(angle, 0.1799);
 
-    //     let v = vector![1,2,-1,-2];
-    //     let w = vector![1,-1,1,-1];
+    //     let v = vector![[1,2,-1,-2]];
+    //     let w = vector![[1,-1,1,-1]];
     //     let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
     //     assert_eq!(angle, 1.5708);
 
