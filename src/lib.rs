@@ -1,4 +1,5 @@
 mod matrix;
+mod geometry;
 pub use matrix::{Matrix, RowVector, ColumnVector};
 
 // #[macro_export]
@@ -93,5 +94,24 @@ macro_rules! identity_matrix {
             elements[i][i] = <$type as num_traits::One>::one();
         }
         Matrix::<$type, $size, $size>::new(elements)
+    }};
+}
+
+#[macro_export]
+macro_rules! rotation_2d {
+    ($angle:expr) => {{
+        let cos = $angle.cos();
+        let sin = $angle.sin();
+        $crate::Matrix::new([
+            [cos, -sin],
+            [sin, cos],
+        ])
+    }};
+}
+
+#[macro_export]
+macro_rules! rotation_3d {
+    ($angle:expr, $axis:expr) => {{
+        $crate::generate_rotation_3d($angle, $axis)
     }};
 }
