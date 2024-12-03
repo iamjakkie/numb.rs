@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use numbrs::{matrix, sqrt_vector, vector, Matrix, RowVector};
+    use numbrs::{matrix, vector, Matrix};
 
     #[test]
     fn test_vector_macro() {
@@ -75,33 +75,6 @@ mod tests {
         // TODO: Implement Mul for Vector<T> where T: Num + Copy
         // let v4 = 5 * v1.clone();
         // assert_eq!(v4, vector![5.0, 10.0, 15.0]);
-    }
-
-    #[test]
-    fn test_vector_operators() {
-        let v1 = vector![[2, 1, -1]];
-        let v2 = vector![[-1, 0, 3]];
-        let result = v1*3 - v2*2;
-        assert_eq!(result, vector![[8, 3, -9]]);
-
-        let v1 = vector![[0,0,2]];
-        let v2 = vector![[-1,2,1]];
-        let v3 = vector![[1,2,0]];
-        let v4 = vector![[3,2,-1]];
-        let result = v1+v2;
-        assert_eq!(result, vector![[-1,2,3]]);
-        let result = v1+v2+v3;
-        assert_eq!(result, vector![[0,4,3]]);
-        let result = v4-v3*2;
-        assert_eq!(result, vector![[1,-2,-1]]);
-        let result = v1 + v2*2 + v3*2 + v4*2;
-        assert_eq!(result, vector![[6, 12, 2]]);
-        let result = v1 + v4;
-        assert_eq!(result, vector![[3,2,1]]);
-        let result = v2*4 + v2*3 - (v2*2 + v2*6);
-        assert_eq!(result, vector![[1,-2,-1]]);
-        let result = v3*4 - v2*2;
-        assert_eq!(result, vector![[6,4,-2]]);
     }
 
     #[test]
@@ -218,5 +191,42 @@ mod tests {
     //     let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
     //     assert_eq!(angle, 2.3562);
     // }
+
+    #[test]
+    fn test_vector_operators() {
+        let v1 = vector![[2, 1, -1]];
+        let v2 = vector![[-1, 0, 3]];
+        let result = v1*3 - v2*2;
+        assert_eq!(result, vector![[8, 3, -9]]);
+
+        let v1 = vector![[0,0,2]];
+        let v2 = vector![[-1,2,1]];
+        let v3 = vector![[1,2,0]];
+        let v4 = vector![[3,2,-1]];
+        let result = v1+v2;
+        assert_eq!(result, vector![[-1,2,3]]);
+        let result = v1+v2+v3;
+        assert_eq!(result, vector![[0,4,3]]);
+        let result = v4-v3*2;
+        assert_eq!(result, vector![[1,-2,-1]]);
+        let result = v1 + v2*2 + v3*2 + v4*2;
+        assert_eq!(result, vector![[6, 12, 2]]);
+        let result = v1 + v4;
+        assert_eq!(result, vector![[3,2,1]]);
+        let result = v2*4 + v2*3 - (v2*2 + v2*6);
+        assert_eq!(result, vector![[1,-2,-1]]);
+        let result = v3*4 - v2*2;
+        assert_eq!(result, vector![[6,4,-2]]);
+
+        let u = vector![[1],[0]];
+        // TODO define
+        // let u_t = u.transpose();
+        let u_t = vector![[1,0]];
+        let res = u * u_t;
+        assert_eq!(res, matrix![[1,0],[0,0]]);
+
+        let res = u_t * u;
+        assert_eq!(res, 1); // ???
+    }
 
 }
