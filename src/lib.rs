@@ -1,7 +1,9 @@
 mod matrix;
 mod geometry;
-pub use matrix::{Matrix, RowVector, ColumnVector};
+mod complex;
 
+pub use matrix::{Matrix, RowVector, ColumnVector};
+pub use complex::{Complex};
 // #[macro_export]
 // macro_rules! vector {
 //     ($value:expr; $size:expr) => {
@@ -114,4 +116,32 @@ macro_rules! rotation_3d {
     ($angle:expr, $axis:expr) => {{
         $crate::generate_rotation_3d($angle, $axis)
     }};
+}
+
+#[macro_export]
+macro_rules! complex {
+    // Case 1: Real + Imaginary (positive)
+    ($re:tt + $im:tt i) => {
+        $crate::Complex::<f64>::new($re as _, $im as _)
+    };
+    // Case 2: Real - Imaginary (negative)
+    ($re:tt - $im:tt i) => {
+        $crate::Complex::<f64>::new($re as _, -$im as _)
+    };
+    // Case 3: Real and Imaginary as separate arguments
+    ($re:expr, $im:expr) => {
+        $crate::Complex::<f64>::new($re, $im)
+    };
+    // Case 4: Real only
+    ($re:tt) => {
+        $crate::Complex::<f64>::new($re as _, 0.0)
+    };
+    // Case 5: Pure imaginary (positive)
+    (+ $im:tt i) => {
+        $crate::Complex::<f64>::new(0.0, $im as _)
+    };
+    // Case 6: Pure imaginary (negative)
+    (- $im:tt i) => {
+        $crate::Complex::<f64>::new(0.0, -($im as _))
+    };
 }
