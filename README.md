@@ -79,6 +79,12 @@
 - ❌ Eigen decompositions,
 - ❌ and more.
 
+### Development
+- ❌ Error handling and robustness.
+- ⚠️ Unit tests and benchmarks.
+- ❌ Documentation and examples.
+- ❌ Parallel processing and GPU acceleration.
+
 ---
 
 ## Macros
