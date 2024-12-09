@@ -4,54 +4,80 @@
 
 ## Features
 
+### Status
+- ✅ Feature A (Working)
+- ❌ Feature B (Missing)
+- ⚠️ Feature C (Partially Implemented)
+
 ### Vectors
 - **Creation**:
-  - Define vectors using the `vector!` macro for row and column vectors.
+  - ✅ Define vectors using the `vector!` macro for row and column vectors.
   - Supports repeated values, square roots, and explicit element definitions.
 - **Operations**:
-  - Addition, scalar multiplication, dot product, and tensor product.
-  - Basis transformations and orthogonality checks.
-  - Supports complex-valued vectors.
+  - ✅ Addition
+  - ✅ Scalar multiplication
+  - ✅ Dot product
+  - ❌ Tensor product.
+  - ❌ Basis transformations and orthogonality checks.
+  - ❌ Supports complex-valued vectors.
 - **Theorems**:
-  - Gram-Schmidt orthogonalization.
-  - Cauchy-Schwarz inequality.
+  - ❌ Gram-Schmidt orthogonalization.
+  - ❌ Cauchy-Schwarz inequality.
 
 ### Matrices
 - **Creation**:
-  - Use the `matrix!` macro for defining matrices with rows and columns.
-  - Generate identity matrices with `identity_matrix!`.
+  - ✅ Use the `matrix!` macro for defining matrices with rows and columns.
+  - ❌ Generate identity matrices with `identity_matrix!`.
 - **Operations**:
-  - Addition, scalar multiplication, matrix multiplication, and transposition.
-  - Conjugate transpose (Hermitian), inverse, and determinant.
-  - Eigenvalue and eigenvector calculations.
+  - ✅ Addition
+  - ✅ Scalar multiplication
+  - ✅ Matrix multiplication
+  - ❌ Transposition.
+  - ❌ Conjugate transpose (Hermitian)
+  - ❌ Inverse
+  - ❌ Determinant.
+  - ❌ Eigenvalue and eigenvector calculations.
 - **Properties**:
-  - Square matrix detection and trace calculation.
-  - Complex-valued matrices supported.
+  - ❌ Square matrix detection and trace calculation.
+  - ❌ Complex-valued matrices supported.
 
 ### Complex Numbers
 - **Creation**:
-  - Define complex numbers using the `complex!` macro with intuitive syntax:
+  - ⚠️ Define complex numbers using the `complex!` macro with intuitive syntax:
     - `complex!(1 + 2i)` for `1 + 2i`.
     - `complex!(3 - 4i)` for `3 - 4i`.
     - `complex!(5i)` for pure imaginary numbers.
 - **Operations**:
-  - Addition, multiplication, conjugation, and modulus calculation.
-  - Compatible with vector and matrix computations.
+  - ❌ Addition
+  - ❌ Multiplication
+  - ❌ Conjugation
+  - ❌ Modulus calculation.
+  - ❌ Compatible with vector and matrix computations.
 
 ### Geometry
 - **Transformations**:
-  - Reflect, rotate, project, and translate points in 2D/3D space.
-  - Use `rotation_2d!` and `rotation_3d!` for generating rotation matrices.
+  - ❌ Reflect
+  - ❌ Rotate
+  - ❌ Project
+  - ❌ Translate points in 2D/3D space.
+  - ❌ Use `rotation_2d!` and `rotation_3d!` for generating rotation matrices.
 - **Advanced Features**:
-  - Projections onto lines or planes.
-  - Scaling and shearing transformations.
+  - ❌ Projections onto lines or planes.
+  - ❌ Scaling and shearing transformations.
 
 ### Decompositions
-- Spectral decomposition, singular value decomposition (SVD), and polar decomposition.
+- ❌ Spectral decomposition
+- ❌ Singular value decomposition (SVD)
+- ❌ Polar decomposition.
+- ❌ QR decomposition.
+- ❌ LU decomposition.
+- ❌ Cholesky decomposition.
 
 ### Additional Features
-- Solve systems of linear equations using matrix operations.
-- Support for trigonometric functions, eigen decompositions, and more.
+- ❌ Solve systems of linear equations using matrix operations.
+- ❌ Support for trigonometric functions
+- ❌ Eigen decompositions,
+- ❌ and more.
 
 ---
 
