@@ -117,27 +117,27 @@ macro_rules! rotation_3d {
 
 #[macro_export]
 macro_rules! complex {
-    // Case 1: Real + Imaginary (positive)
-    (concat!(stringify!($re:tt), "+", stringify!($im:tt)),"i") => {
+    ($re:tt + $im:tt i) => {
         $crate::Complex::<f64>::new($re as _, $im as _)
     };
-    // Case 2: Real - Imaginary (negative)
+    ($re:tt - $im:tt i) => {
+        $crate::Complex::<f64>::new($re as _, -$im as _)
+    };
+    ($re:tt + $im:tt) => {
+        $crate::Complex::<f64>::new($re as _, $im as _)
+    };
     ($re:tt - $im:tt) => {
         $crate::Complex::<f64>::new($re as _, -$im as _)
     };
-    // Case 3: Real and Imaginary as separate arguments
     ($re:expr, $im:expr) => {
         $crate::Complex::<f64>::new($re as f64, $im as f64)
     };
-    // Case 4: Real only
     ($re:tt) => {
         $crate::Complex::<f64>::new($re as _, 0.0)
     };
-    // Case 5: Pure imaginary (positive)
     (+ $im:tt i) => {
         $crate::Complex::<f64>::new(0.0, $im as _)
     };
-    // Case 6: Pure imaginary (negative)
     (- $im:tt i) => {
         $crate::Complex::<f64>::new(0.0, -($im as _))
     };
