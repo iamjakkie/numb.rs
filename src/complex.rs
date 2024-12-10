@@ -43,3 +43,17 @@ where
         Self::new(self.re - other.re, self.im - other.im)
     }
 }
+
+impl<T> std::ops::Mul for Complex<T>
+where
+    T: std::ops::Mul<Output = T> + std::ops::Sub<Output = T> + std::ops::Add<Output = T> + Copy
+{
+    type Output = Self;
+
+    fn mul(self, other: Self) -> Self {
+        Self::new(
+            self.re * other.re - self.im * other.im,
+            self.re * other.im + self.im * other.re,
+        )
+    }
+}

@@ -50,7 +50,7 @@
 - **Operations**:
   - ✅ Addition
   - ✅ Subtraction
-  - ❌ Multiplication
+  - ✅ Multiplication
   - ❌ Conjugation
   - ❌ Modulus calculation.
   - ❌ Compatible with vector and matrix computations.
