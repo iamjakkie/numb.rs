@@ -1,8 +1,9 @@
-mod complex;
+// mod complex;
 mod geometry;
 mod matrix;
 
-pub use complex::Complex;
+// pub use complex::Complex;
+pub use num::Complex;
 pub use matrix::{ColumnVector, Matrix, RowVector};
 // #[macro_export]
 // macro_rules! vector {
@@ -46,6 +47,15 @@ macro_rules! vector {
         const SIZE: usize = [$($x),*].len();
         $crate::RowVector::new($crate::Matrix::<_, 1, SIZE>::new([[$($x),*]])) // Row vector with explicit elements
     }};
+    // TODO: hardcode macro up to ?? elements, otherwise use constructor
+    // ([ $x:expr, $y:expr ]) => {{
+    //     $crate::RowVector::new($crate::Matrix::<_, 1, 2>::new([[ $x, $y ]])) // Row vector with explicit elements
+    // }};
+
+    // ([ $($arg:tt), ]) => {{
+    //     let SIZE: usize = [$($arg),*].len();
+    //     $crate::RowVector::new($crate::Matrix::<_, 1, SIZE>::new([[$($arg),*]])) // Row vector with explicit elements
+    // }};
     // Case 5: Explicit column vector
     ($( [ $x:expr ] ),+ $(,)?) => {{
         const SIZE: usize = [$([$x]),*].len();
@@ -133,12 +143,12 @@ macro_rules! complex {
         $crate::Complex::<f64>::new($re as f64, $im as f64)
     };
     ($re:tt) => {
-        $crate::Complex::<f64>::new($re as _, 0.0)
+        $crate::Complex::<f64>::new($re as f64, 0.0)
     };
     (+ $im:tt i) => {
-        $crate::Complex::<f64>::new(0.0, $im as _)
+        $crate::Complex::<f64>::new(0.0, $im as f64)
     };
     (- $im:tt i) => {
-        $crate::Complex::<f64>::new(0.0, -($im as _))
+        $crate::Complex::<f64>::new(0.0, -($im as f64))
     };
 }
