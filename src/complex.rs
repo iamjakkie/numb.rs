@@ -19,6 +19,16 @@ impl<T> Complex<T> {
     {
         Self::new(self.re, -self.im)
     }
-
     // pub fn
+}
+
+impl<T> std::ops::Add for Complex<T>
+where
+    T: std::ops::Add<Output = T>,
+{
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Self::new(self.re + other.re, self.im + other.im)
+    }
 }

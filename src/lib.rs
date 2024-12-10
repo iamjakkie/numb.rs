@@ -127,7 +127,7 @@ macro_rules! complex {
     };
     // Case 3: Real and Imaginary as separate arguments
     ($re:expr, $im:expr) => {
-        $crate::Complex::<f64>::new($re, $im)
+        $crate::Complex::<f64>::new($re as f64, $im as f64)
     };
     // Case 4: Real only
     ($re:tt) => {
