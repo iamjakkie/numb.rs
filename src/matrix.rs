@@ -1,21 +1,20 @@
-use std::ops::{Add, Sub, Mul, BitXor};
 use num::{Num, ToPrimitive};
 use std::fmt::Debug;
-
+use std::ops::{Add, BitXor, Mul, Sub};
 
 #[derive(Debug, Clone, PartialEq, Copy)]
-pub struct Matrix<T, const M: usize, const N: usize> 
-where 
+pub struct Matrix<T, const M: usize, const N: usize>
+where
     T: Debug,
 {
-    pub elements: [[T;N];M],
+    pub elements: [[T; N]; M],
 }
 
-impl<T, const M: usize, const N: usize> Matrix<T, M, N> 
+impl<T, const M: usize, const N: usize> Matrix<T, M, N>
 where
     T: Debug + Num + Copy,
 {
-    pub fn new(elements: [[T;N];M]) -> Self {
+    pub fn new(elements: [[T; N]; M]) -> Self {
         Self { elements }
     }
 
@@ -56,16 +55,16 @@ where
     }
 
     pub fn len(&self) -> usize {
-        M*N
+        M * N
     }
 }
 
 #[derive(Debug)]
 pub struct RowVector<T, const N: usize>(pub Matrix<T, 1, N>)
-where 
+where
     T: Debug + Num + Copy + ToPrimitive;
 
-impl<T, const N: usize> RowVector<T,N>
+impl<T, const N: usize> RowVector<T, N>
 where
     T: Debug + Num + Copy + ToPrimitive,
 {
@@ -87,7 +86,7 @@ where
 
 #[derive(Debug)]
 pub struct ColumnVector<T, const N: usize>(Matrix<T, N, 1>)
-where 
+where
     T: Debug + Num + Copy + ToPrimitive;
 
 impl<T, const M: usize> ColumnVector<T, M>
@@ -110,10 +109,7 @@ where
     }
 }
 
-impl<T, const N: usize> Copy for RowVector<T, N>
-where
-    T: Copy + Debug + Num + ToPrimitive,
-{}
+impl<T, const N: usize> Copy for RowVector<T, N> where T: Copy + Debug + Num + ToPrimitive {}
 
 impl<T, const N: usize> Clone for RowVector<T, N>
 where
@@ -160,10 +156,7 @@ where
     }
 }
 
-impl<T, const N: usize> Copy for ColumnVector<T, N>
-where
-    T: Copy + Debug + Num + ToPrimitive,
-{}
+impl<T, const N: usize> Copy for ColumnVector<T, N> where T: Copy + Debug + Num + ToPrimitive {}
 
 impl<T, const N: usize> Clone for ColumnVector<T, N>
 where
@@ -182,7 +175,11 @@ where
 
     fn add(self, other: Self) -> Self {
         // Ensure the matrices have the same dimensions
-        assert_eq!(self.len(), other.len(), "Matrices must have the same dimensions");
+        assert_eq!(
+            self.len(),
+            other.len(),
+            "Matrices must have the same dimensions"
+        );
 
         let elements = self
             .elements
@@ -242,7 +239,6 @@ where
     }
 }
 
-
 impl<T, const N: usize> Add for ColumnVector<T, N>
 where
     T: Debug + Num + Copy + ToPrimitive,
@@ -262,7 +258,11 @@ where
 
     fn sub(self, other: Self) -> Self {
         // Ensure the matrices have the same dimensions
-        assert_eq!(self.len(), other.len(), "Matrices must have the same dimensions");
+        assert_eq!(
+            self.len(),
+            other.len(),
+            "Matrices must have the same dimensions"
+        );
 
         let elements = self
             .elements
@@ -358,7 +358,7 @@ where
 
 impl<T, const M: usize, const N: usize> Mul<ColumnVector<T, N>> for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy +ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = ColumnVector<T, M>;
 
@@ -420,7 +420,8 @@ where
     type Output = f64;
 
     fn mul(self, other: ColumnVector<T, N>) -> f64 {
-        self.0.elements
+        self.0
+            .elements
             .iter()
             .zip(other.0.elements.iter())
             .map(|([a], [b])| {
@@ -489,8 +490,6 @@ where
             .fold(T::zero(), |acc, x| acc + x)
     }
 }
-
-
 
 impl<T, const N: usize> BitXor<u32> for Matrix<T, N, N>
 where

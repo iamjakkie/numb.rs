@@ -1,9 +1,9 @@
-mod matrix;
-mod geometry;
 mod complex;
+mod geometry;
+mod matrix;
 
-pub use matrix::{Matrix, RowVector, ColumnVector};
-pub use complex::{Complex};
+pub use complex::Complex;
+pub use matrix::{ColumnVector, Matrix, RowVector};
 // #[macro_export]
 // macro_rules! vector {
 //     ($value:expr; $size:expr) => {
@@ -104,10 +104,7 @@ macro_rules! rotation_2d {
     ($angle:expr) => {{
         let cos = $angle.cos();
         let sin = $angle.sin();
-        $crate::Matrix::new([
-            [cos, -sin],
-            [sin, cos],
-        ])
+        $crate::Matrix::new([[cos, -sin], [sin, cos]])
     }};
 }
 
@@ -121,11 +118,11 @@ macro_rules! rotation_3d {
 #[macro_export]
 macro_rules! complex {
     // Case 1: Real + Imaginary (positive)
-    ($re:tt + $im:tt i) => {
+    (concat!(stringify!($re:tt), "+", stringify!($im:tt)),"i") => {
         $crate::Complex::<f64>::new($re as _, $im as _)
     };
     // Case 2: Real - Imaginary (negative)
-    ($re:tt - $im:tt i) => {
+    ($re:tt - $im:tt) => {
         $crate::Complex::<f64>::new($re as _, -$im as _)
     };
     // Case 3: Real and Imaginary as separate arguments

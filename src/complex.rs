@@ -1,4 +1,6 @@
-use std::ops::{Neg};
+// TO BE MOVED TO A SEPARATE CRATE
+
+use std::ops::Neg;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Complex<T> {
@@ -11,12 +13,12 @@ impl<T> Complex<T> {
         Self { re, im }
     }
 
-    pub fn conjugate(&self) -> Self 
+    pub fn conjugate(&self) -> Self
     where
         T: Copy + Neg<Output = T>,
     {
         Self::new(self.re, -self.im)
     }
 
-    // pub fn 
+    // pub fn
 }
