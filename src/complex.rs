@@ -94,3 +94,19 @@ where
         )
     }
 }
+
+impl<T> std::ops::BitXor<i32> for Complex<T>
+where
+    T: std::ops::Mul<Output = T> + std::ops::Sub<Output = T> + std::ops::Add<Output = T> + Copy
+{
+    type Output = Self;
+
+    fn bitxor(self, power: i32) -> Self {
+        let mut result = self;
+        // naive greedy
+        for _ in 1..power {
+            result = result * self;
+        }
+        result
+    }
+}
