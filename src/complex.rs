@@ -57,3 +57,40 @@ where
         )
     }
 }
+
+impl<T> std::ops::Mul<T> for Complex<T>
+where
+    T: std::ops::Mul<Output = T> + Copy
+{
+    type Output = Self;
+
+    fn mul(self, other: T) -> Self {
+        Self::new(self.re * other, self.im * other)
+    }
+}
+
+// impl<T> std::ops::Mul<Complex<T>> for T
+// where
+//     T: std::ops::Mul<Output = T> + Copy
+// {
+//     type Output = Complex<T>;
+
+//     fn mul(self, other: Complex<T>) -> Complex<T> {
+//         Complex::new(self * other.re, self * other.im)
+//     }
+// }
+
+impl<T> std::ops::Div for Complex<T>
+where
+    T: std::ops::Div<Output = T> + std::ops::Add<Output = T> + std::ops::Mul<Output = T>  + std::ops::Sub<Output = T> + Copy
+{
+    type Output = Self;
+
+    fn div(self, other: Self) -> Self {
+        let denominator = other.re * other.re + other.im * other.im;
+        Self::new(
+            (self.re * other.re + self.im * other.im) / denominator,
+            (self.im * other.re - self.re * other.im) / denominator,
+        )
+    }
+}
