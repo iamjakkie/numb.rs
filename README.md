@@ -48,7 +48,8 @@
     - `complex!(3 - 4i)` for `3 - 4i`.
     - `complex!(5i)` for pure imaginary numbers.
 - **Operations**:
-  - ❌ Addition
+  - ✅ Addition
+  - ✅ Subtraction
   - ❌ Multiplication
   - ❌ Conjugation
   - ❌ Modulus calculation.
