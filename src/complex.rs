@@ -32,3 +32,14 @@ where
         Self::new(self.re + other.re, self.im + other.im)
     }
 }
+
+impl<T> std::ops::Sub for Complex<T>
+where
+    T: std::ops::Sub<Output = T>,
+{
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self {
+        Self::new(self.re - other.re, self.im - other.im)
+    }
+}
