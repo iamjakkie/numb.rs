@@ -52,7 +52,7 @@
   - ✅ Subtraction
   - ✅ Multiplication
   - ✅ Division
-  - ❌ Conjugation
+  - ✅ Conjugation
   - ❌ Modulus calculation.
   - ❌ Compatible with vector and matrix computations.
 
