@@ -1,4 +1,4 @@
-use num::{Num, ToPrimitive};
+use num::{Num, Signed, ToPrimitive};
 use std::fmt::Debug;
 use std::ops::{Add, BitXor, Mul, Sub};
 
@@ -12,7 +12,7 @@ where
 
 impl<T, const M: usize, const N: usize> Matrix<T, M, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + Signed,
 {
     pub fn new(elements: [[T; N]; M]) -> Self {
         Self { elements }
@@ -57,7 +57,46 @@ where
     pub fn len(&self) -> usize {
         M * N
     }
+
+    pub fn lu_decomposition(&self) -> (Matrix<T, N, N>, Matrix<T, N, N>, T) {
+        let mut l = Matrix::<T, N, N>::identity(); // Lower triangular matrix
+        let mut u = *self; // Upper triangular matrix (copied from the original matrix)
+        let mut sign = T::one(); // Keeps track of sign adjustments due to row swaps
+
+        for k in 0..N {
+            // Partial pivoting: find the row with the largest absolute value in column `k`
+            let mut pivot_row = k;
+            for i in (k + 1)..N {
+                if u.elements[i][k].abs() > u.elements[pivot_row][k].abs() {
+                    pivot_row = i;
+                }
+            }
+
+            // If pivot_row is not the current row, swap rows and adjust the sign
+            if pivot_row != k {
+                u.elements.swap(k, pivot_row);
+                sign = -sign;
+            }
+
+            // Perform Gaussian elimination
+            for i in (k + 1)..N {
+                let factor = u.elements[i][k] / u.elements[k][k];
+                l.elements[i][k] = factor; // Store the factor in `L`
+
+                for j in k..N {
+                    u.elements[i][j] = u.elements[i][j] - factor * u.elements[k][j];
+                }
+            }
+        }
+
+        (l, u, sign)
+    }
 }
+
+#[derive(Debug)]
+pub struct NumWrapper<T: Num>(T)
+where
+    T: Debug + Num + Copy;
 
 #[derive(Debug)]
 pub struct RowVector<T, const N: usize>(pub Matrix<T, 1, N>)
@@ -169,7 +208,7 @@ where
 
 impl<T, const M: usize, const N: usize> Add for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + Signed,
 {
     type Output = Self;
 
@@ -230,7 +269,7 @@ where
 // }
 impl<T, const N: usize> Add for RowVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive + Signed,
 {
     type Output = RowVector<T, N>;
 
@@ -241,7 +280,7 @@ where
 
 impl<T, const N: usize> Add for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive + Signed,
 {
     type Output = ColumnVector<T, N>;
 
@@ -490,6 +529,19 @@ where
             .fold(T::zero(), |acc, x| acc + x)
     }
 }
+
+// implement multiplication for 5 * RowVector
+// impl<T, U, const N: usize> Mul<RowVector<T, N>> for U
+// where
+//     T: Debug + Num + Copy + From<U> + ToPrimitive,
+//     U: Debug + Num + Copy,
+// {
+//     type Output = RowVector<T, N>;
+
+//     fn mul(self, vector: RowVector<T, N>) -> Self::Output {
+//         vector * self
+//     }
+// }
 
 impl<T, const N: usize> BitXor<u32> for Matrix<T, N, N>
 where
