@@ -12,7 +12,7 @@ where
 
 impl<T, const M: usize, const N: usize> Matrix<T, M, N>
 where
-    T: Debug + Num + Copy + Signed,
+    T: Debug + Num + Copy,
 {
     pub fn new(elements: [[T; N]; M]) -> Self {
         Self { elements }
@@ -230,7 +230,7 @@ where
 
 impl<T, const M: usize, const N: usize> Add for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy + Signed,
+    T: Debug + Num + Copy,
 {
     type Output = Self;
 
@@ -291,7 +291,7 @@ where
 // }
 impl<T, const N: usize> Add for RowVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive + Signed,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = RowVector<T, N>;
 
@@ -302,7 +302,7 @@ where
 
 impl<T, const N: usize> Add for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive + Signed,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = ColumnVector<T, N>;
 
@@ -313,7 +313,7 @@ where
 
 impl<T, const M: usize, const N: usize> Sub for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy + Signed,
+    T: Debug + Num + Copy,
 {
     type Output = Self;
 
@@ -348,7 +348,7 @@ where
 
 impl<T, const N: usize> Sub for RowVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive + Signed,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = RowVector<T, N>;
 
@@ -359,7 +359,7 @@ where
 
 impl<T, const N: usize> Sub for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive + Signed,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = ColumnVector<T, N>;
 
@@ -370,7 +370,7 @@ where
 
 impl<T, U, const M: usize, const N: usize> Mul<U> for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy + From<U> + Signed,
+    T: Debug + Num + Copy + From<U>,
     U: Num + Copy,
 {
     type Output = Self;
@@ -397,7 +397,7 @@ where
 // this is the basic multiplication, naive, greedy, slow and inefficient
 impl<T, const M: usize, const N: usize, const P: usize> Mul<Matrix<T, N, P>> for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy + Signed,
+    T: Debug + Num + Copy,
 {
     type Output = Matrix<T, M, P>;
 
@@ -419,7 +419,7 @@ where
 
 impl<T, const M: usize, const N: usize> Mul<ColumnVector<T, N>> for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy + ToPrimitive + Signed,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = ColumnVector<T, M>;
 
@@ -438,7 +438,7 @@ where
 
 impl<T, const M: usize, const N: usize> Mul<Matrix<T, M, N>> for RowVector<T, M>
 where
-    T: Debug + Num + Copy + ToPrimitive + Signed,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = Matrix<T, 1, N>; // Result is a row vector
 
@@ -457,7 +457,7 @@ where
 
 impl<T, const N: usize> Mul<RowVector<T, N>> for RowVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive + Signed,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = f64;
 
@@ -496,7 +496,7 @@ where
 
 impl<T, U, const N: usize> Mul<U> for RowVector<T, N>
 where
-    T: Debug + Num + Copy + From<U> + ToPrimitive + Signed,
+    T: Debug + Num + Copy + From<U> + ToPrimitive,
     U: Num + Copy,
 {
     type Output = Self;
@@ -508,7 +508,7 @@ where
 
 impl<T, U, const N: usize> Mul<U> for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + From<U> + ToPrimitive + Signed,
+    T: Debug + Num + Copy + From<U> + ToPrimitive,
     U: Num + Copy,
 {
     type Output = Self;
@@ -520,7 +520,7 @@ where
 
 impl<T, const N: usize, const M: usize> Mul<RowVector<T, M>> for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive + Signed,
+    T: Debug + Num + Copy + ToPrimitive,
 {
     type Output = Matrix<T, N, M>; // Result is a matrix
 
@@ -567,7 +567,7 @@ where
 
 impl<T, const N: usize> BitXor<u32> for Matrix<T, N, N>
 where
-    T: Debug + Num + Copy + Signed,
+    T: Debug + Num + Copy,
 {
     type Output = Self;
 
