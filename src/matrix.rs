@@ -58,39 +58,41 @@ where
         M * N
     }
 
-    pub fn lu_decomposition(&self) -> (Matrix<T, N, N>, Matrix<T, N, N>, T) {
-        let mut l = Matrix::<T, N, N>::identity(); // Lower triangular matrix
-        let mut u = *self; // Upper triangular matrix (copied from the original matrix)
-        let mut sign = T::one(); // Keeps track of sign adjustments due to row swaps
+    // pub fn lu_decomposition(&self) -> (Matrix<T, N, N>, Matrix<T, N, N>, T) 
+    // where T: std::cmp::PartialOrd + Signed
+    // {
+    //     let mut l = Matrix::<T, N, N>::identity(); // Lower triangular matrix
+    //     let mut u = *self; // Upper triangular matrix (copied from the original matrix)
+    //     let mut sign = T::one(); // Keeps track of sign adjustments due to row swaps
 
-        for k in 0..N {
-            // Partial pivoting: find the row with the largest absolute value in column `k`
-            let mut pivot_row = k;
-            for i in (k + 1)..N {
-                if u.elements[i][k].abs() > u.elements[pivot_row][k].abs() {
-                    pivot_row = i;
-                }
-            }
+    //     for k in 0..N {
+    //         // Partial pivoting: find the row with the largest absolute value in column `k`
+    //         let mut pivot_row = k;
+    //         for i in (k + 1)..N {
+    //             if u.elements[i][k].abs() > u.elements[pivot_row][k].abs() {
+    //                 pivot_row = i;
+    //             }
+    //         }
 
-            // If pivot_row is not the current row, swap rows and adjust the sign
-            if pivot_row != k {
-                u.elements.swap(k, pivot_row);
-                sign = -sign;
-            }
+    //         // If pivot_row is not the current row, swap rows and adjust the sign
+    //         if pivot_row != k {
+    //             u.elements.swap(k, pivot_row);
+    //             sign = -sign;
+    //         }
 
-            // Perform Gaussian elimination
-            for i in (k + 1)..N {
-                let factor = u.elements[i][k] / u.elements[k][k];
-                l.elements[i][k] = factor; // Store the factor in `L`
+    //         // Perform Gaussian elimination
+    //         for i in (k + 1)..N {
+    //             let factor = u.elements[i][k] / u.elements[k][k];
+    //             l.elements[i][k] = factor; // Store the factor in `L`
 
-                for j in k..N {
-                    u.elements[i][j] = u.elements[i][j] - factor * u.elements[k][j];
-                }
-            }
-        }
+    //             for j in k..N {
+    //                 u.elements[i][j] = u.elements[i][j] - factor * u.elements[k][j];
+    //             }
+    //         }
+    //     }
 
-        (l, u, sign)
-    }
+    //     (l, u, sign)
+    // }
 }
 
 #[derive(Debug)]
@@ -121,6 +123,25 @@ where
             .sum::<f64>()
             .sqrt()
     }
+
+    pub fn dot(&self, other: &RowVector<T, N>) -> f64 {
+        self.0.elements[0]
+            .iter()
+            .zip(other.0.elements[0].iter())
+            .map(|(&a, &b)| {
+                let a_f64 = a.to_f64().expect("Conversion to f64 failed");
+                let b_f64 = b.to_f64().expect("Conversion to f64 failed");
+                a_f64 * b_f64
+            })
+            .sum()
+    }
+
+    pub fn angle_between(&self, other: &RowVector<T, N>) -> f64 {
+        let dot_product = self.dot(other);
+        let magnitudes = self.magnitude() * other.magnitude();
+        dot_product.acos() / magnitudes
+    }
+
 }
 
 #[derive(Debug)]
@@ -291,7 +312,7 @@ where
 
 impl<T, const M: usize, const N: usize> Sub for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + Signed,
 {
     type Output = Self;
 
@@ -326,7 +347,7 @@ where
 
 impl<T, const N: usize> Sub for RowVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive + Signed,
 {
     type Output = RowVector<T, N>;
 
@@ -337,7 +358,7 @@ where
 
 impl<T, const N: usize> Sub for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive + Signed,
 {
     type Output = ColumnVector<T, N>;
 
@@ -348,7 +369,7 @@ where
 
 impl<T, U, const M: usize, const N: usize> Mul<U> for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy + From<U>,
+    T: Debug + Num + Copy + From<U> + Signed,
     U: Num + Copy,
 {
     type Output = Self;
@@ -375,7 +396,7 @@ where
 // this is the basic multiplication, naive, greedy, slow and inefficient
 impl<T, const M: usize, const N: usize, const P: usize> Mul<Matrix<T, N, P>> for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + Signed,
 {
     type Output = Matrix<T, M, P>;
 
@@ -397,7 +418,7 @@ where
 
 impl<T, const M: usize, const N: usize> Mul<ColumnVector<T, N>> for Matrix<T, M, N>
 where
-    T: Debug + Num + Copy + ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive + Signed,
 {
     type Output = ColumnVector<T, M>;
 
@@ -416,7 +437,7 @@ where
 
 impl<T, const M: usize, const N: usize> Mul<Matrix<T, M, N>> for RowVector<T, M>
 where
-    T: Debug + Num + Copy + ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive + Signed,
 {
     type Output = Matrix<T, 1, N>; // Result is a row vector
 
@@ -435,7 +456,7 @@ where
 
 impl<T, const N: usize> Mul<RowVector<T, N>> for RowVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive + Signed,
 {
     type Output = f64;
 
@@ -474,7 +495,7 @@ where
 
 impl<T, U, const N: usize> Mul<U> for RowVector<T, N>
 where
-    T: Debug + Num + Copy + From<U> + ToPrimitive,
+    T: Debug + Num + Copy + From<U> + ToPrimitive + Signed,
     U: Num + Copy,
 {
     type Output = Self;
@@ -486,7 +507,7 @@ where
 
 impl<T, U, const N: usize> Mul<U> for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + From<U> + ToPrimitive,
+    T: Debug + Num + Copy + From<U> + ToPrimitive + Signed,
     U: Num + Copy,
 {
     type Output = Self;
@@ -498,7 +519,7 @@ where
 
 impl<T, const N: usize, const M: usize> Mul<RowVector<T, M>> for ColumnVector<T, N>
 where
-    T: Debug + Num + Copy + ToPrimitive,
+    T: Debug + Num + Copy + ToPrimitive + Signed,
 {
     type Output = Matrix<T, N, M>; // Result is a matrix
 
@@ -545,7 +566,7 @@ where
 
 impl<T, const N: usize> BitXor<u32> for Matrix<T, N, N>
 where
-    T: Debug + Num + Copy,
+    T: Debug + Num + Copy + Signed,
 {
     type Output = Self;
 
