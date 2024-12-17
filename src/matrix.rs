@@ -139,7 +139,8 @@ where
     pub fn angle_between(&self, other: &RowVector<T, N>) -> f64 {
         let dot_product = self.dot(other);
         let magnitudes = self.magnitude() * other.magnitude();
-        dot_product.acos() / magnitudes
+        let cos_theta = dot_product / magnitudes;
+        cos_theta.acos()
     }
 
 }
