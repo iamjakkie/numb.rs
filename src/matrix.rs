@@ -54,6 +54,92 @@ where
         Matrix::new(elements)
     }
 
+    pub fn inverse(self) -> Option<Matrix<f64, M, N>>
+    where
+        T: Num + Copy + ToPrimitive + PartialOrd + Debug,
+    {
+        let precision = 6;
+        // Ensure the matrix is square
+        if M != N {
+            return None;
+        }
+
+        let aug_cols = 2 * N; // Calculate augmented matrix columns at runtime
+
+        // Create an augmented matrix [A | I] as f64
+        let mut augmented = vec![vec![0.0_f64; aug_cols]; M];
+        for i in 0..M {
+            for j in 0..N {
+                augmented[i][j] = self.elements[i][j].to_f64().expect("Conversion to f64 failed");
+                augmented[i][j + N] = if i == j { 1.0 } else { 0.0 };
+            }
+        }
+
+        // Perform row operations to transform the left side into the identity matrix
+        for i in 0..N {
+            // Find the pivot
+            let mut pivot = i;
+            for j in i + 1..M {
+                if augmented[j][i].abs() > augmented[pivot][i].abs() {
+                    pivot = j;
+                }
+            }
+
+            // Swap the rows
+            augmented.swap(i, pivot);
+
+            // Ensure the pivot is not zero
+            if augmented[i][i] == 0.0 {
+                return None;
+            }
+
+            // Scale the row to make the pivot 1
+            let divisor = augmented[i][i];
+            for j in 0..aug_cols {
+                augmented[i][j] /= divisor;
+            }
+
+            // Perform row operations to make the other elements in the column zero
+            for j in 0..M {
+                if i != j {
+                    let factor = augmented[j][i];
+                    for k in 0..aug_cols {
+                        augmented[j][k] -= factor * augmented[i][k];
+                    }
+                }
+            }
+        }
+
+        // Extract the right side of the augmented matrix and round the results
+        let mut result = [[0.0; N]; M];
+        for i in 0..M {
+            for j in 0..N {
+                result[i][j] = (augmented[i][j + N] * 10f64.powi(precision as i32)).round()
+                    / 10f64.powi(precision as i32);
+            }
+        }
+
+        Some(Matrix::new(result))
+    }
+
+    // pub fn conjugate_transpose(self) -> Matrix<T, N, M> {
+    //     let transposed = self.transpose();
+    //     // for each element do the conjugate, if the element is complex
+    //     let mut result = [[T::zero(); M]; N];
+
+    //     for i in 0..N {
+    //         for j in 0..M {
+    //             result[i][j] = if let Some(conjugate) = transposed.elements[i][j].try_conjugate() {
+    //                 conjugate
+    //             } else {
+    //                 transposed.elements[i][j] // No conjugation for real numbers
+    //             };
+    //         }
+    //     }
+    
+    //     Matrix::new(result)
+    // }
+
     pub fn len(&self) -> usize {
         M * N
     }
