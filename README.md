@@ -42,6 +42,7 @@
   - ❌ Complex-valued matrices supported.
 
 ### Complex Numbers
+<i>Note: Custom implementation has been replaced by num::Complex</i>
 - **Creation**:
   - ⚠️ Define complex numbers using the `complex!` macro with intuitive syntax:
     - `complex!(1 + 2i)` for `1 + 2i`.
@@ -54,7 +55,7 @@
   - ✅ Division
   - ✅ Conjugation
   - ❌ Modulus calculation.
-  - ❌ Compatible with vector and matrix computations.
+  - ✅ Compatible with vector and matrix computations.
 
 ### Geometry
 - **Transformations**:
