@@ -2,6 +2,7 @@ use num::{Num, Signed, ToPrimitive};
 use std::fmt::Debug;
 use std::ops::{Add, BitXor, Mul, Sub};
 
+
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub struct Matrix<T, const M: usize, const N: usize>
 where
@@ -122,6 +123,34 @@ where
         Some(Matrix::new(result))
     }
 
+    // pub fn determinant(self) -> T
+    // where
+    //     T: Num + Copy + Signed,
+    // {
+    //     // Ensure the matrix is square
+    //     assert_eq!(M, N, "Matrix must be square");
+
+    //     // Base case: 1x1 matrix
+    //     if M == 1 {
+    //         return self.elements[0][0];
+    //     }
+
+    //     // Base case: 2x2 matrix
+    //     if M == 2 {
+    //         return self.elements[0][0] * self.elements[1][1] - self.elements[0][1] * self.elements[1][0];
+    //     }
+
+    //     // Recursive case: use Laplace expansion
+    //     let mut det = T::zero();
+    //     for i in 0..N {
+    //         let sign = if i % 2 == 0 { T::one() } else { -T::one() };
+    //         let minor = self.minor(0, i);
+    //         det = det + sign * self.elements[0][i] * minor.determinant();
+    //     }
+
+    //     det
+    // }
+
     // pub fn conjugate_transpose(self) -> Matrix<T, N, M> {
     //     let transposed = self.transpose();
     //     // for each element do the conjugate, if the element is complex
@@ -144,41 +173,7 @@ where
         M * N
     }
 
-    // pub fn lu_decomposition(&self) -> (Matrix<T, N, N>, Matrix<T, N, N>, T) 
-    // where T: std::cmp::PartialOrd + Signed
-    // {
-    //     let mut l = Matrix::<T, N, N>::identity(); // Lower triangular matrix
-    //     let mut u = *self; // Upper triangular matrix (copied from the original matrix)
-    //     let mut sign = T::one(); // Keeps track of sign adjustments due to row swaps
-
-    //     for k in 0..N {
-    //         // Partial pivoting: find the row with the largest absolute value in column `k`
-    //         let mut pivot_row = k;
-    //         for i in (k + 1)..N {
-    //             if u.elements[i][k].abs() > u.elements[pivot_row][k].abs() {
-    //                 pivot_row = i;
-    //             }
-    //         }
-
-    //         // If pivot_row is not the current row, swap rows and adjust the sign
-    //         if pivot_row != k {
-    //             u.elements.swap(k, pivot_row);
-    //             sign = -sign;
-    //         }
-
-    //         // Perform Gaussian elimination
-    //         for i in (k + 1)..N {
-    //             let factor = u.elements[i][k] / u.elements[k][k];
-    //             l.elements[i][k] = factor; // Store the factor in `L`
-
-    //             for j in k..N {
-    //                 u.elements[i][j] = u.elements[i][j] - factor * u.elements[k][j];
-    //             }
-    //         }
-    //     }
-
-    //     (l, u, sign)
-    // }
+    
 }
 
 #[derive(Debug)]
