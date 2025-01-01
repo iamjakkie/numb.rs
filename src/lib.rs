@@ -1,10 +1,12 @@
 // mod complex;
 mod geometry;
 mod matrix;
+mod decomposition;
 
 // pub use complex::Complex;
 pub use num::Complex;
 pub use matrix::{ColumnVector, Matrix, RowVector};
+pub use decomposition::{PartialPivLu};
 // #[macro_export]
 // macro_rules! vector {
 //     ($value:expr; $size:expr) => {
