@@ -123,6 +123,71 @@ where
         Some(Matrix::new(result))
     }
 
+    fn determinant_2x2(&self) -> T {
+        assert!(M == 2 && N == 2, "Matrix must be 2x2 for this function.");
+        self.elements[0][0] * self.elements[1][1] - self.elements[0][1] * self.elements[1][0]
+    }
+
+    /// Determinant for 3x3 matrix
+    fn determinant_3x3(&self) -> T {
+        assert!(M == 3 && N == 3, "Matrix must be 3x3 for this function.");
+        let a = self.elements[0][0];
+        let b = self.elements[0][1];
+        let c = self.elements[0][2];
+        let d = self.elements[1][0];
+        let e = self.elements[1][1];
+        let f = self.elements[1][2];
+        let g = self.elements[2][0];
+        let h = self.elements[2][1];
+        let i = self.elements[2][2];
+
+        a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g)
+    }
+
+    /// Determinant for NxN matrix
+    // pub fn determinant(&self) -> T {
+    //     assert!(M == N, "Matrix must be square to compute determinant.");
+
+    //     match M {
+    //         1 => self.elements[0][0],
+    //         2 => self.determinant_2x2(),
+    //         3 => self.determinant_3x3(),
+    //         _ => {
+    //             let mut det = T::zero();
+    //             for i in 0..N {
+    //                 let sign = if i % 2 == 0 { T::one() } else { -T::one() };
+    //                 let minor = self.minor(0, i);
+    //                 det = det + sign * self.elements[0][i] * minor.determinant();
+    //             }
+    //             det
+    //         }
+    //     }
+    // }
+
+    /// Compute the minor matrix by removing the specified row and column
+    // fn minor(&self, row: usize, col: usize) -> Matrix<T, M, N> {
+    //     assert!(M > 1 && N > 1, "Matrix must be larger than 1x1 to compute a minor.");
+
+    //     let mut minor_elements = vec![vec![T::zero(); N - 1]; M - 1];
+    //     for i in 0..M {
+    //         if i == row {
+    //             continue;
+    //         }
+    //         for j in 0..N {
+    //             if j == col {
+    //                 continue;
+    //             }
+    //             let minor_row = if i < row { i } else { i - 1 };
+    //             let minor_col = if j < col { j } else { j - 1 };
+    //             minor_elements[minor_row][minor_col] = self.elements[i][j];
+    //         }
+    //     }
+
+    //     let minor_elements: [[T; N - 1]; M - 1] = minor_elements.into_iter().map(|row| row.try_into().unwrap()).collect::<Vec<_>>().try_into().unwrap();
+    //     Matrix::new(minor_elements)
+    // }
+
+
     // pub fn determinant(self) -> T
     // where
     //     T: Num + Copy + Signed,
