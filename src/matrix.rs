@@ -1,6 +1,6 @@
 use num::{Num, Signed, ToPrimitive};
 use std::fmt::Debug;
-use std::ops::{Add, BitXor, Mul, Sub};
+use std::ops::{Add, BitXor, Mul, Neg, Sub};
 
 
 #[derive(Debug, Clone, PartialEq, Copy)]
@@ -17,6 +17,24 @@ where
 {
     pub fn new(elements: [[T; N]; M]) -> Self {
         Self { elements }
+    }
+
+    pub fn to_dyn(&self) -> DynMatrix<T> 
+    where T: Neg<Output = T>{
+        let mut data = Vec::with_capacity(M * N);
+        for i in 0..M {
+            for j in 0..N {
+                data.push(self.elements[i][j]);
+            }
+        }
+        DynMatrix::new(M, N, data)
+    }
+
+    pub fn determinant(&self) -> T 
+    where T: Neg<Output = T>{
+        assert_eq!(M, N, "Matrix must be square to compute determinant.");
+        let dyn_mat = self.to_dyn();
+        dyn_mat.determinant()
     }
 
     pub fn zeros() -> Self {
@@ -768,3 +786,52 @@ where
 //         Vector::new(result)
 //     }
 // }
+
+
+#[derive(Debug, Clone)]
+pub struct DynMatrix<T> {
+    pub rows: usize,
+    pub cols: usize,
+    pub data: Vec<T>, // Stored in row-major order
+}
+
+impl<T> DynMatrix<T>  
+where
+    T: Debug + Num + Copy + Neg<Output = T>,
+{
+    pub fn new(rows: usize, cols: usize, data: Vec<T>) -> Self {
+        assert_eq!(data.len(), rows * cols, "Data does not match dimensions");
+        DynMatrix { rows, cols, data }
+    }
+
+    pub fn determinant(&self) -> T {
+        assert_eq!(self.rows, self.cols, "Matrix must be square to compute determinant.");
+        if self.rows == 1 {
+            return self.data[0];
+        }
+        if self.rows == 2 {
+            return self.data[0] * self.data[3] - self.data[1] * self.data[2];
+        }
+        let mut det = T::zero();
+        for col in 0..self.cols {
+            let sign = if col % 2 == 0 { T::one() } else { -T::one() };
+            let element = self.data[col];
+            let minor_matrix = self.minor(0, col);
+            det = det + sign * element * minor_matrix.determinant();
+        }
+        det
+    }
+    pub fn minor(&self, row: usize, col: usize) -> DynMatrix<T> {
+        let new_rows = self.rows - 1;
+        let new_cols = self.cols - 1;
+        let mut new_data = Vec::with_capacity(new_rows * new_cols);
+        for i in 0..self.rows {
+            if i == row { continue; }
+            for j in 0..self.cols {
+                if j == col { continue; }
+                new_data.push(self.data[i * self.cols + j]);
+            }
+        }
+        DynMatrix { rows: new_rows, cols: new_cols, data: new_data }
+    }
+}
