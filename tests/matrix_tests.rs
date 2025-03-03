@@ -154,6 +154,21 @@ mod tests {
         let a = matrix![[1, 2], [3, 4]];
         let res = a.determinant();
         assert_eq!(res, -2);
+
+        let a = matrix![[3,1,6,4], [-2,5,3,3], [6,-2,4,1], [3,4,-2,6]];
+        let res = a.determinant();
+        assert_eq!(res, -545);
+
+        let a = matrix![
+            [2,2,5,-1,1,-1],
+            [1,3,0,0,1,1],
+            [1,2,5,-1,0,3],
+            [4,0,5,5,-1,3],
+            [5,-1,5,2,0,-1],
+            [3,0,3,3,4,3]
+        ];
+        let res = a.determinant();
+        assert_eq!(res, -4008);
     }
 
 
