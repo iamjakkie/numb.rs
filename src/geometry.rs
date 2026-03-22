@@ -1,6 +1,6 @@
 use crate::Matrix;
 use num::{Num, Float};
-use std::fmt::Debug;
+use core::fmt::Debug;
 
 pub enum Axis {
     X,
