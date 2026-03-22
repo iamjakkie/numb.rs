@@ -1,6 +1,9 @@
 use num::{Num, Signed, ToPrimitive};
-use std::fmt::Debug;
-use std::ops::{Add, BitXor, Mul, Neg, Sub};
+use core::fmt::Debug;
+use core::ops::{Add, BitXor, Mul, Neg, Sub};
+
+#[cfg(not(feature = "std"))]
+use num_traits::Float;
 
 
 #[derive(Debug, Clone, PartialEq, Copy)]
@@ -19,6 +22,7 @@ where
         Self { elements }
     }
 
+    #[cfg(feature = "std")]
     pub fn to_dyn(&self) -> DynMatrix<T> 
     where T: Neg<Output = T>{
         let mut data = Vec::with_capacity(M * N);
@@ -30,11 +34,57 @@ where
         DynMatrix::new(M, N, data)
     }
 
+    #[cfg(feature = "std")]
     pub fn determinant(&self) -> T 
     where T: Neg<Output = T>{
         assert_eq!(M, N, "Matrix must be square to compute determinant.");
         let dyn_mat = self.to_dyn();
         dyn_mat.determinant()
+    }
+
+    #[cfg(not(feature = "std"))]
+    pub fn determinant(&self) -> T
+    where T: Neg<Output = T> + Signed + PartialOrd,
+    {
+        assert_eq!(M, N, "Matrix must be square to compute determinant.");
+
+        match M {
+            1 => self.elements[0][0],
+            2 => self.determinant_2x2(),
+            3 => self.determinant_3x3(),
+            _ => {
+                let mut mat = self.elements;
+                let mut sign = T::one();
+
+                for k in 0..N {
+                    let mut pivot = k;
+                    for i in (k + 1)..M {
+                        if mat[i][k].abs() > mat[pivot][k].abs() {
+                            pivot = i;
+                        }
+                    }
+                    if pivot != k {
+                        mat.swap(k, pivot);
+                        sign = -sign;
+                    }
+                    if mat[k][k] == T::zero() {
+                        return T::zero();
+                    }
+                    for i in (k + 1)..M {
+                        let factor = mat[i][k] / mat[k][k];
+                        for j in k..N {
+                            mat[i][j] = mat[i][j] - factor * mat[k][j];
+                        }
+                    }
+                }
+
+                let mut det = sign;
+                for i in 0..M {
+                    det = det * mat[i][i];
+                }
+                det
+            }
+        }
     }
 
     pub fn zeros() -> Self {
@@ -73,6 +123,7 @@ where
         Matrix::new(elements)
     }
 
+    #[cfg(feature = "std")]
     pub fn inverse(self) -> Option<Matrix<f64, M, N>>
     where
         T: Num + Copy + ToPrimitive + PartialOrd + Debug,
@@ -406,22 +457,29 @@ where
             "Matrices must have the same dimensions"
         );
 
-        let elements = self
-            .elements
-            .iter()
-            .zip(other.elements.iter())
-            .map(|(row_a, row_b)| {
-                row_a
-                    .iter()
-                    .zip(row_b.iter())
-                    .map(|(a, b)| *a + *b)
-                    .collect::<Vec<_>>()
-                    .try_into()
-                    .expect("Row size mismatch")
-            })
-            .collect::<Vec<_>>()
-            .try_into()
-            .expect("Matrix size mismatch");
+        let mut elements = [[T::zero(); N]; M];
+        for i in 0..M {
+            for j in 0..N {
+                elements[i][j] = self.elements[i][j] + other.elements[i][j];
+            }
+        }
+
+        // let elements = self
+        //     .elements
+        //     .iter()
+        //     .zip(other.elements.iter())
+        //     .map(|(row_a, row_b)| {
+        //         row_a
+        //             .iter()
+        //             .zip(row_b.iter())
+        //             .map(|(a, b)| *a + *b)
+        //             .collect::<Vec<_>>()
+        //             .try_into()
+        //             .expect("Row size mismatch")
+        //     })
+        //     .collect::<Vec<_>>()
+        //     .try_into()
+        //     .expect("Matrix size mismatch");
 
         Self::new(elements)
     }
@@ -489,22 +547,29 @@ where
             "Matrices must have the same dimensions"
         );
 
-        let elements = self
-            .elements
-            .iter()
-            .zip(other.elements.iter())
-            .map(|(row_a, row_b)| {
-                row_a
-                    .iter()
-                    .zip(row_b.iter())
-                    .map(|(a, b)| *a - *b)
-                    .collect::<Vec<_>>()
-                    .try_into()
-                    .expect("Row size mismatch")
-            })
-            .collect::<Vec<_>>()
-            .try_into()
-            .expect("Matrix size mismatch");
+        // let elements = self
+        //     .elements
+        //     .iter()
+        //     .zip(other.elements.iter())
+        //     .map(|(row_a, row_b)| {
+        //         row_a
+        //             .iter()
+        //             .zip(row_b.iter())
+        //             .map(|(a, b)| *a - *b)
+        //             .collect::<Vec<_>>()
+        //             .try_into()
+        //             .expect("Row size mismatch")
+        //     })
+        //     .collect::<Vec<_>>()
+        //     .try_into()
+        //     .expect("Matrix size mismatch");
+
+        let mut elements = [[T::zero(); N]; M];
+        for i in 0..M {
+            for j in 0..N {
+                elements[i][j] = self.elements[i][j] - other.elements[i][j];
+            }
+        }
 
         Self::new(elements)
     }
@@ -541,19 +606,26 @@ where
 
     fn mul(self, scalar: U) -> Self {
         let scalar_t = T::from(scalar);
-        let elements = self
-            .elements
-            .iter()
-            .map(|row| {
-                row.iter()
-                    .map(|&x| x * scalar_t)
-                    .collect::<Vec<_>>()
-                    .try_into()
-                    .expect("Row size mismatch")
-            })
-            .collect::<Vec<_>>()
-            .try_into()
-            .expect("Matrix size mismatch");
+        // let elements = self
+        //     .elements
+        //     .iter()
+        //     .map(|row| {
+        //         row.iter()
+        //             .map(|&x| x * scalar_t)
+        //             .collect::<Vec<_>>()
+        //             .try_into()
+        //             .expect("Row size mismatch")
+        //     })
+        //     .collect::<Vec<_>>()
+        //     .try_into()
+        //     .expect("Matrix size mismatch");
+
+        let mut elements = [[T::zero(); N]; M];
+        for i in 0..M {
+            for j in 0..N {
+                elements[i][j] = self.elements[i][j] * scalar_t;
+            }
+        }
         Self::new(elements)
     }
 }
@@ -787,7 +859,7 @@ where
 //     }
 // }
 
-
+#[cfg(feature = "std")]
 #[derive(Debug, Clone)]
 pub struct DynMatrix<T> {
     pub rows: usize,
@@ -795,6 +867,7 @@ pub struct DynMatrix<T> {
     pub data: Vec<T>, // Stored in row-major order
 }
 
+#[cfg(feature = "std")]
 impl<T> DynMatrix<T>  
 where
     T: Debug + Num + Copy + Neg<Output = T>,

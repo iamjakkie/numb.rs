@@ -3,10 +3,13 @@ name = "numbrs"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+default = ["std"]
+std = []
+
 [dependencies]
-num = "0.4"        # For Float trait
-ndarray = "0.15"   # Optional: For advanced array ops
-num-traits = "0.2.19"
+num = { version = "0.4", default-features = false, features = ["libm"] }
+num-traits = { version = "0.2.19", default-features = false, features = ["libm"] }
 
 [dev-dependencies]
 criterion = "0.4"  # For benchmarks
