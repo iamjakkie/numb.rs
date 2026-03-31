@@ -1,3 +1,5 @@
+#![cfg_attr(not(feature = "std"), no_std)]
+
 // mod complex;
 mod geometry;
 mod matrix;
