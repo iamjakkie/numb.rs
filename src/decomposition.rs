@@ -1,6 +1,6 @@
 use crate::Matrix;
-use num::{Num, Signed};
 use core::fmt::Debug;
+use num::{Num, Signed};
 
 #[derive(Debug, Clone)]
 pub struct PartialPivLu<T, const N: usize>

@@ -1,10 +1,9 @@
-use num::{Num, Signed, ToPrimitive};
 use core::fmt::Debug;
 use core::ops::{Add, BitXor, Mul, Neg, Sub};
+use num::{Num, ToPrimitive};
 
 #[cfg(not(feature = "std"))]
 use num_traits::Float;
-
 
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub struct Matrix<T, const M: usize, const N: usize>
@@ -23,8 +22,10 @@ where
     }
 
     #[cfg(feature = "std")]
-    pub fn to_dyn(&self) -> DynMatrix<T> 
-    where T: Neg<Output = T>{
+    pub fn to_dyn(&self) -> DynMatrix<T>
+    where
+        T: Neg<Output = T>,
+    {
         let mut data = Vec::with_capacity(M * N);
         for i in 0..M {
             for j in 0..N {
@@ -35,8 +36,10 @@ where
     }
 
     #[cfg(feature = "std")]
-    pub fn determinant(&self) -> T 
-    where T: Neg<Output = T>{
+    pub fn determinant(&self) -> T
+    where
+        T: Neg<Output = T>,
+    {
         assert_eq!(M, N, "Matrix must be square to compute determinant.");
         let dyn_mat = self.to_dyn();
         dyn_mat.determinant()
@@ -44,7 +47,8 @@ where
 
     #[cfg(not(feature = "std"))]
     pub fn determinant(&self) -> T
-    where T: Neg<Output = T> + Signed + PartialOrd,
+    where
+        T: Neg<Output = T> + Signed + PartialOrd,
     {
         assert_eq!(M, N, "Matrix must be square to compute determinant.");
 
@@ -140,7 +144,9 @@ where
         let mut augmented = vec![vec![0.0_f64; aug_cols]; M];
         for i in 0..M {
             for j in 0..N {
-                augmented[i][j] = self.elements[i][j].to_f64().expect("Conversion to f64 failed");
+                augmented[i][j] = self.elements[i][j]
+                    .to_f64()
+                    .expect("Conversion to f64 failed");
                 augmented[i][j + N] = if i == j { 1.0 } else { 0.0 };
             }
         }
@@ -251,11 +257,9 @@ where
     //             minor_elements[minor_row][minor_col] = self.elements[i][j];
     //         }
     //     }
-
     //     let minor_elements: [[T; N - 1]; M - 1] = minor_elements.into_iter().map(|row| row.try_into().unwrap()).collect::<Vec<_>>().try_into().unwrap();
     //     Matrix::new(minor_elements)
     // }
-
 
     // pub fn determinant(self) -> T
     // where
@@ -299,15 +303,12 @@ where
     //             };
     //         }
     //     }
-    
     //     Matrix::new(result)
     // }
 
     pub fn len(&self) -> usize {
         M * N
     }
-
-    
 }
 
 #[derive(Debug)]
@@ -357,7 +358,6 @@ where
         let cos_theta = dot_product / magnitudes;
         cos_theta.acos()
     }
-
 }
 
 #[derive(Debug)]
@@ -868,7 +868,7 @@ pub struct DynMatrix<T> {
 }
 
 #[cfg(feature = "std")]
-impl<T> DynMatrix<T>  
+impl<T> DynMatrix<T>
 where
     T: Debug + Num + Copy + Neg<Output = T>,
 {
@@ -878,7 +878,10 @@ where
     }
 
     pub fn determinant(&self) -> T {
-        assert_eq!(self.rows, self.cols, "Matrix must be square to compute determinant.");
+        assert_eq!(
+            self.rows, self.cols,
+            "Matrix must be square to compute determinant."
+        );
         if self.rows == 1 {
             return self.data[0];
         }
@@ -899,12 +902,20 @@ where
         let new_cols = self.cols - 1;
         let mut new_data = Vec::with_capacity(new_rows * new_cols);
         for i in 0..self.rows {
-            if i == row { continue; }
+            if i == row {
+                continue;
+            }
             for j in 0..self.cols {
-                if j == col { continue; }
+                if j == col {
+                    continue;
+                }
                 new_data.push(self.data[i * self.cols + j]);
             }
         }
-        DynMatrix { rows: new_rows, cols: new_cols, data: new_data }
+        DynMatrix {
+            rows: new_rows,
+            cols: new_cols,
+            data: new_data,
+        }
     }
 }

@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use numbrs::{identity_matrix, matrix, vector, Matrix, complex};
+    use numbrs::{complex, identity_matrix, matrix, vector, Matrix};
 
     #[test]
     fn test_matrix_macro() {
@@ -45,7 +45,10 @@ mod tests {
         let filled = matrix![5.0; 2, 2];
         assert_eq!(filled, Matrix::new([[5.0, 5.0], [5.0, 5.0],]));
 
-        let complex_matrix = matrix![[complex!(1, 2), complex!(3, 4)], [complex!(5, 6), complex!(7, 8)],];
+        let complex_matrix = matrix![
+            [complex!(1, 2), complex!(3, 4)],
+            [complex!(5, 6), complex!(7, 8)],
+        ];
         assert_eq!(
             complex_matrix,
             Matrix::new([
@@ -139,7 +142,7 @@ mod tests {
 
     #[test]
     fn test_matrix_inverse() {
-        let c = matrix![[4,7],[2,6]];
+        let c = matrix![[4, 7], [2, 6]];
         let res = c.inverse().expect("Matrix is not invertible");
         println!("{:?}", res);
         assert_eq!(res, matrix![[0.6, -0.7], [-0.2, 0.4],]);
@@ -155,9 +158,8 @@ mod tests {
         // // assert_eq!(L, matrix![[1,0,0], [-2,1,0], [0,4,1],]);
         // assert_eq!(U, matrix![[3,1,6], [0,2,-4], [0,0,-1]]);
 
-        let c = matrix![[-2,1,3], [-4,4,1]];
+        let c = matrix![[-2, 1, 3], [-4, 4, 1]];
         // let res = c.lu_decomposition();
-
     }
 
     #[test]
@@ -166,23 +168,21 @@ mod tests {
         let res = a.determinant();
         assert_eq!(res, -2);
 
-        let a = matrix![[3,1,6,4], [-2,5,3,3], [6,-2,4,1], [3,4,-2,6]];
+        let a = matrix![[3, 1, 6, 4], [-2, 5, 3, 3], [6, -2, 4, 1], [3, 4, -2, 6]];
         let res = a.determinant();
         assert_eq!(res, -545);
 
         let a = matrix![
-            [2,2,5,-1,1,-1],
-            [1,3,0,0,1,1],
-            [1,2,5,-1,0,3],
-            [4,0,5,5,-1,3],
-            [5,-1,5,2,0,-1],
-            [3,0,3,3,4,3]
+            [2, 2, 5, -1, 1, -1],
+            [1, 3, 0, 0, 1, 1],
+            [1, 2, 5, -1, 0, 3],
+            [4, 0, 5, 5, -1, 3],
+            [5, -1, 5, 2, 0, -1],
+            [3, 0, 3, 3, 4, 3]
         ];
         let res = a.determinant();
         assert_eq!(res, -4008);
     }
-
-
 
     // general
 

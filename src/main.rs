@@ -1,5 +1,5 @@
-use numbrs::Matrix;
 use num::Complex;
+use numbrs::Matrix;
 fn main() {
     let x1 = 2.0_f64.sqrt();
     let x2 = 3.0_f64.sqrt();
@@ -10,8 +10,6 @@ fn main() {
     let v = Matrix::new([[x1, x2]]);
 
     println!("{:?}", v);
-
-
 
     // let c = complex!(1+2 i);
 

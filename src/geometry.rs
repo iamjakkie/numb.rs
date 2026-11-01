@@ -1,6 +1,6 @@
 use crate::Matrix;
-use num::{Num, Float};
 use core::fmt::Debug;
+use num::Float;
 
 pub enum Axis {
     X,
@@ -14,12 +14,8 @@ pub enum Axis {
 pub fn generate_rotation_2d<T: Float + Debug + Copy>(angle: f32) -> Matrix<f32, 2, 2> {
     let cos = angle.cos();
     let sin = angle.sin();
-    Matrix::new([
-        [cos, -sin],
-        [sin, cos],
-    ])
+    Matrix::new([[cos, -sin], [sin, cos]])
 }
-
 
 // pub fn generate_rotation_3d<T: Num + Debug + Copy>(angle: T, axis: Axis) -> Matrix<T, 3, 3> {
 //     let cos = angle.cos();

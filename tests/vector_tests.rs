@@ -85,8 +85,8 @@ mod tests {
         let dot = v1 * v2;
         assert_eq!(dot, 32.0);
         // TODO: assert impossible
-        let v1 = vector![[3,6,2]];
-        let v2 = vector![[-1,5,2,1]];
+        let v1 = vector![[3, 6, 2]];
+        let v2 = vector![[-1, 5, 2, 1]];
         // check the compiler message and match it in the test ???
         // clippy tests
         // let dot = v1 * v2;
@@ -161,13 +161,13 @@ mod tests {
 
     #[test]
     fn test_vector_angles() {
-        let v = vector![[1,2]];
-        let w = vector![[3,4]];
+        let v = vector![[1, 2]];
+        let w = vector![[3, 4]];
         let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
         assert_eq!(angle, 0.1799);
 
-        let v = vector![[1,2,-1,-2]];
-        let w = vector![[1,-1,1,-1]];
+        let v = vector![[1, 2, -1, -2]];
+        let w = vector![[1, -1, 1, -1]];
         let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
         assert_eq!(angle, 1.5708);
 
@@ -184,13 +184,13 @@ mod tests {
         // let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
         // assert_eq!(angle, 0.5236);
 
-        let v = vector![[0,-2,2]];
-        let w = vector![[1,0,1]];
+        let v = vector![[0, -2, 2]];
+        let w = vector![[1, 0, 1]];
         let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
         assert_eq!(angle, 1.0472);
 
-        let v = vector![[1,1,1,1]];
-        let w = vector![[-2,0,-2,0]];
+        let v = vector![[1, 1, 1, 1]];
+        let w = vector![[-2, 0, -2, 0]];
         let angle = (v.angle_between(&w) * 10000.0).round() / 10000.0;
         assert_eq!(angle, 2.3562);
     }

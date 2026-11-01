@@ -1,14 +1,14 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 // mod complex;
+mod decomposition;
 mod geometry;
 mod matrix;
-mod decomposition;
 
 // pub use complex::Complex;
-pub use num::Complex;
+pub use decomposition::PartialPivLu;
 pub use matrix::{ColumnVector, Matrix, RowVector};
-pub use decomposition::{PartialPivLu};
+pub use num::Complex;
 // #[macro_export]
 // macro_rules! vector {
 //     ($value:expr; $size:expr) => {

@@ -29,7 +29,7 @@ mod tests {
     #[test]
     fn test_complex_addition() {
         let c = complex!(1, 2);
-        let d = complex!(3,-5);
+        let d = complex!(3, -5);
 
         let result = c + d;
         assert_eq!(result, complex!(4.0, -3.0));
@@ -38,7 +38,7 @@ mod tests {
     #[test]
     fn test_complex_subtraction() {
         let c = complex!(1, 2);
-        let d = complex!(3,-5);
+        let d = complex!(3, -5);
 
         let result = c - d;
         assert_eq!(result, complex!(-2.0, 7.0));
@@ -55,9 +55,9 @@ mod tests {
         let result = c * 10.0;
         assert_eq!(result, complex!(20.0, 30.0));
 
-        let a = complex!(2,-3);
+        let a = complex!(2, -3);
         let b = complex!(5, 1);
-        
+
         let result = a * b;
         assert_eq!(result, complex!(13.0, -13.0));
 
@@ -172,7 +172,8 @@ mod tests {
 
     #[test]
     fn test_complex_operator() {
-        let operation = (complex!(5, -1) - complex!(3, -2)) * (complex!(-2, 1) - complex!(3, -1) * complex!(3, 1));
+        let operation = (complex!(5, -1) - complex!(3, -2))
+            * (complex!(-2, 1) - complex!(3, -1) * complex!(3, 1));
         assert_eq!(operation, complex!(-25.0, -10));
     }
 }
