@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # 1. Refuse to release if the git tag and Cargo.toml disagree.
+  verify-version:
+    name: tag matches Cargo.toml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare tag with Cargo.toml version
+        run: |
+          # `refs/tags/v0.1.0` -> `0.1.0`
+          tag="${GITHUB_REF_NAME#v}"
+          # First `version = "..."` line in Cargo.toml -> `0.1.0`
+          crate="$(sed -n 's/^version *= *"\(.*\)"/\1/p' Cargo.toml | head -n1)"
+          echo "tag=$tag crate=$crate"
+          if [ "$tag" != "$crate" ]; then
+            echo "::error::Tag v$tag does not match Cargo.toml version $crate"
+            exit 1
+          fi
+
+  # 2. Same gate as CI: a tag must not ship anything that CI would reject.
+  test:
+    name: test
+    needs: verify-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+          targets: thumbv7em-none-eabihf
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo test --all-features
+      - run: cargo build --no-default-features --target thumbv7em-none-eabihf
+      - run: cargo doc --no-deps --all-features
+        env:
+          RUSTDOCFLAGS: -D warnings
+
+  # 3. Package the crate exactly as crates.io would see it, but do not upload.
+  publish:
+    name: cargo publish (dry run)
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo publish --dry-run
+
+      # Real publish is a later milestone. Before enabling this:
+      #   1. Rename the package to `numb-rs` in Cargo.toml (`numbrs` is taken on crates.io).
+      #   2. Create an API token at https://crates.io/settings/tokens with the
+      #      "publish-new" + "publish-update" scopes, limited to this crate.
+      #   3. Add it to the repo: Settings -> Secrets and variables -> Actions ->
+      #      New repository secret, name `CARGO_REGISTRY_TOKEN`.
+      #   4. Uncomment the step below.
+      # - run: cargo publish
+      #   env:
+      #     CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
