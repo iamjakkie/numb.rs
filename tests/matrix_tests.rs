@@ -45,6 +45,17 @@ mod tests {
         let filled = matrix![5.0; 2, 2];
         assert_eq!(filled, Matrix::new([[5.0, 5.0], [5.0, 5.0],]));
 
+        let complex_matrix = matrix![[complex!(1, 2), complex!(3, 4)], [complex!(5, 6), complex!(7, 8)],];
+        assert_eq!(
+            complex_matrix,
+            Matrix::new([
+                [complex!(1, 2), complex!(3, 4)],
+                [complex!(5, 6), complex!(7, 8)],
+            ])
+        );
+
+        let mixed = matrix![[12.0, complex!(1, 2)], [complex!(0, -1), 4.0]];
+
         // let mixed = matrix![[12.0, complex!(1, 2)]];
         // assert_eq!(mixed, Matrix::new([[12.0, complex!(1, 2)],]));
     }
