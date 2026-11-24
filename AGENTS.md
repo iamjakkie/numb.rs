@@ -18,13 +18,13 @@
 - Tolerances in tests are stated explicitly (relative error or ULPs), never `assert_eq!` on floats.
 
 ## How tasks work
-- Planning lives in the private hq repo (`iamjakkie/hq`). Each task here is an issue with **Context**, **Acceptance oracles**, **Allowed files** and a **Kind**; its first line links the hq original (`HQ copy: iamjakkie/hq#N`).
+- Tasks are GitHub issues in this repo. Each has **Context**, **Acceptance oracles**, **Allowed files** and a **Kind**.
 - Start from `gh issue view <n>`. Restate goal, oracles and allowed files, propose a plan, and wait for approval before editing.
 - Behave according to **Kind**:
   - **Plumbing (agent)** – implement it, inside Allowed files only.
   - **Core (by hand)** – the human writes the logic. Do not write implementation code for it. Explain, point to references, review diffs, suggest test cases.
   - **Thinking** – produce the requested document; no code.
-- Branch: `task/<n>-<short-slug>`. PR description: `Closes #<n>, closes iamjakkie/hq#<N>`, then what you verified (command + result) and what you did **not** verify. Tick only the oracles you actually checked.
+- Branch: `task/<n>-<short-slug>`. PR description: `Closes #<n>`, then what you verified (command + result) and what you did **not** verify. Tick only the oracles you actually checked.
 
 ## Always
 - Run the build, tests and linters below before calling anything done.
